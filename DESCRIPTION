@@ -1,0 +1,17 @@
+Package: FSAmisc
+Title: Miscellaneous functions for simple fisheries stock assessment methods
+Version: 0.0.1
+Date: 2015
+Description: In progress or miscellaneous functions eventually destined for the FSA package.
+Authors@R: person("Derek","Ogle",email="dogle@northland.edu",role=c("aut","cre"))
+URL: http://fishr.wordpress.com/, https://github.com/droglenc/FSAmisc, https://github.com/droglenc/FSA
+BugReports: https://github.com/droglenc/FSAmisc/issues
+License: GPL (>= 2)
+LazyData: true
+Depends:
+    R (>= 3.0.0)
+Imports:
+    FSA
+Suggests:
+    popbio,
+    testthat
