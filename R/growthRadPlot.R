@@ -4,7 +4,7 @@
 #'
 #' @details This function constructs a plot of horizonal lines for each individual with the annular increments marked with vertical lines.  This is simply an exploratory graph to allow visual comparison of patterns among individuals.
 #'
-#' This function requires one-fish-per-line radial measurement data.  See \code{\link{gReshape}} and \code{\link{gConvert}} if your data is one-increment-per-line or increment measurements.  This function also assumes that the data frame has the total radius-at-capture and the fish's age.  See \code{\link{addRadCap}} to add the total radius at capture variable (if your data was increments).
+#' This function requires one-fish-per-line radial measurement data. This function also assumes that the data frame has the total radius-at-capture and the fish's age.
 #'
 #' @param df A data frame that contains the radial growth measurement data in one-fish-per-line format.
 #' @param indivs A string that contains the variable name or a vector of strings that contains the variable names that identify individual fish in the data frame.
@@ -25,7 +25,7 @@
 #'
 #' @author Derek H. Ogle, \email{dogle@@northland.edu}
 #'
-#' @seealso \code{\link{gReshape}}, \code{\link{gConvert}}
+#' @seealso \code{\link{gReshape}}
 #'
 #' @keywords manip
 #'
@@ -37,7 +37,7 @@
 #' head(SMBassWB)     # to see column names & some data
 #' growthRadPlot(SMBassWB,c("yearcap","gear","fish"),
 #'               in.pre="anu",radcap="radcap",agevar="agecap",ymar=6)
-#'                
+#'
 #' } ## END IF INTERACTIVE MODE
 #'
 #' @export
@@ -50,13 +50,13 @@ growthRadPlot <- function(df,indivs,in.pre="rad",in.var,radcap="radcap",agevar="
   if (missing(in.pre) & missing(in.var)) stop("You must use one of the in.pre or in.var arguments.",call.=FALSE)
   if (!missing(in.pre) & !missing(in.var)) warning("Both in.var and cols arguments were used.  Only the in.var argument will be used.",call.=FALSE)
   if (!missing(in.pre) & missing(in.var)) { in.var <- grep(in.pre,names(df)) }
-  
+
   # combine labels if >1 item is sent to indivs= argument
   if (length(indivs)>1) ylabs <- apply(df[,indivs],1,paste,collapse=".")
     else ylabs <- df[,indivs]
 
-  # make the plot    
-  opar <- par(mar=c(3,ymar,1,3),mgp=c(1.75,0.75,0),ask=TRUE)
+  # make the plot
+  opar <- graphics::par(mar=c(3,ymar,1,3),mgp=c(1.75,0.75,0),ask=TRUE)
   # set values for y-axis of the plots
   yvals <- -(1:numperpg)
   # set maximum for x-axis
@@ -76,17 +76,17 @@ growthRadPlot <- function(df,indivs,in.pre="rad",in.var,radcap="radcap",agevar="
       # only put line on if there is a line to plot
       if (length(xvals)>1) {
         # put the line down
-        if (proportions) lines(c(0,1),rep(yvals[j-(numperpg*(i-1))],2),lwd=lwd,col=col,...)
-          else lines(c(0,df[j,radcap]),rep(yvals[j-(numperpg*(i-1))],2),lwd=lwd,col=col,...)
+        if (proportions) graphics::lines(c(0,1),rep(yvals[j-(numperpg*(i-1))],2),lwd=lwd,col=col,...)
+          else graphics::lines(c(0,df[j,radcap]),rep(yvals[j-(numperpg*(i-1))],2),lwd=lwd,col=col,...)
         # mark increments with a vertical line
-        points(xvals,rep(yvals[j-(numperpg*(i-1))],length(xvals+1)),lwd=lwd,col=col,pch=pch,...)
-       }                                                                                          
+        graphics::points(xvals,rep(yvals[j-(numperpg*(i-1))],length(xvals+1)),lwd=lwd,col=col,pch=pch,...)
+       }
     } # end fish on current page loop (j)
     # put y-axis label of fish id
-    axis(2,at=yvals,labels=ylabs[(numperpg*(i-1)+1):(numperpg*i)],las=1)
-    mtext(paste(indivs,collapse="."),at=grconvertX(-0.075,"npc"),xpd=TRUE)
-    axis(4,at=yvals,labels=df[(numperpg*(i-1)+1):(numperpg*i),agevar],las=1)
-    mtext("age",at=grconvertX(1.05,"npc"),xpd=TRUE)                                               
+    graphics::axis(2,at=yvals,labels=ylabs[(numperpg*(i-1)+1):(numperpg*i)],las=1)
+    graphics::mtext(paste(indivs,collapse="."),at=graphics::grconvertX(-0.075,"npc"),xpd=TRUE)
+    graphics::axis(4,at=yvals,labels=df[(numperpg*(i-1)+1):(numperpg*i),agevar],las=1)
+    graphics::mtext("age",at=graphics::grconvertX(1.05,"npc"),xpd=TRUE)
   } # end pages loop (i)
-  par(opar)
+  graphics::par(opar)
 }

@@ -1,4 +1,5 @@
 ## Prepare data for testing
+data(Mirex)
 Mirex$fyear <- factor(Mirex$year)
 
 
@@ -35,12 +36,12 @@ test_that("compSlopes() & compIntercepts() mesages",{
                "with one factor and one covariate")
   expect_error(compIntercepts(tmp),
                "with one factor and one covariate")
-  
+
   ## Testing intercepts with an interaction in the model
   tmp <- lm(mirex~weight*fyear,data=Mirex)
   expect_warning(compIntercepts(tmp),
                  "Removed an interaction")
-  
+
   ## Only two groups/levels ... function not needed
   Mirex2 <- filterD(Mirex,year %in% c(1977,1982))
   tmp <- lm(mirex~weight*fyear,data=Mirex2)
@@ -58,7 +59,7 @@ test_that("Same results with compSlopes() & compIntercepts() if variables are re
   expect_identical(compSlopes(tmp1),compSlopes(tmp2))
   expect_identical(suppressWarnings(compIntercepts(tmp1)),
                    suppressWarnings(compIntercepts(tmp2)))
-})  
+})
 
 ## Validate Results ----
 

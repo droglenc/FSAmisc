@@ -9,7 +9,7 @@
 #' A legend can be added to the plot in three different ways. First, if \code{legend = TRUE} then the R console is suspended until the user places the legend on the graphic by clicking on the graphic at the point where the upper-left corner of the legend should appear. Second, the \code{legend=} argument can be set to one of \code{"bottomright"}, \code{"bottom"}, \code{"bottomleft"}, \code{"left"}, \code{"topleft"}, \code{"top"}, \code{"topright"}, \code{"right"} and \code{"center"}. In this case, the legend will be placed inside the plot frame at the given location. Finally, the \code{legend=} argument can be set to a vector of length two which identifies the plot coordinates for the upper-left corner of where the legend should be placed. A legend will not be drawn if \code{legend = FALSE} or \code{legend = NULL}. A legend also will not be drawn if there are not multiple groups in the model.
 #'
 #' @note This function is meant to allow newbie students the ability to visualize the most common linear models found in an introductory or intermediate level undergraduate statistics course without getting \dQuote{bogged-down} in the gritty details of a wide variety of functions. This generic function and it's S3 functions allow the student to visualize the means plot of a one-way anova, the main effects and interaction plots of a two-way ANOVA, the fit of a simple linear regression, the fits of many lines in an indicator variable regression, and the fit of a non-linear model with a simple and mostly common set of arguments -- generally, all that is required is a fitted linear model of the type mentioned here as the first argument. This function thus allows newbie students to interact with and visualize moderately complex linear models in a fairly easy and efficient manner. THIS IS NOT A RESEARCH GRADE FUNCTION and the user should learn how to use the functions that this function is based on, build plots from \dQuote{scratch}, or use more sophisticated plotting packages (e.g., \pkg{ggplot2} or \pkg{lattice}).
-#' 
+#'
 #' @aliases fitPlot fitPlot.lm fitPlot.SLR fitPlot.IVR fitPlot.POLY fitPlot.ONEWAY fitPlot.TWOWAY fitPlot.nls fitPlot.glm fitPlot.logreg
 #'
 #' @param object An \code{lm} or \code{nls} object (i.e., returned from fitting a model with either \code{lm} or \code{nls}).
@@ -20,7 +20,7 @@
 #' @param col A vector of color names or the name of a palette (from \code{\link[grDevices]{hcl.pals}}) that indicates what color of points and lines to use for the levels of the first factor in an IVR or the second factor in a two-way ANOVA.
 #' @param col.pt A string used to indicate the color of the plotted points. Used only for SLR and logistic regression objects.
 #' @param col.mdl A string used to indicate the color of the fitted line. Used only for SLR and logistic regression objects.
-#' @param lwd A numeric used to indicate the line width of the fitted line. 
+#' @param lwd A numeric used to indicate the line width of the fitted line.
 #' @param lty A numeric or vector of numerics used to indicate the type of line used for the fitted line. In SLR this is a single value to be used for the fitted line. In IVR a vector is used to identify the line types for the levels of the second factor. See \code{par}.
 #' @param lty.ci a numeric used to indicate the type of line used for the confidence band lines for SLR objects or interval lines for one-way and two-way ANOVA. For IVR, the confidence band types are controlled by \code{lty}.
 #' @param lty.pi a numeric used to indicate the type of line used for the prediction band lines for SLR objects. For IVR, the prediction band types are controlled by \code{lty}. See \code{par}.
@@ -53,19 +53,20 @@
 #' @param \dots Other arguments to be passed to the plot functions.
 #'
 #' @return None. However, a fitted-line plot is produced.
-#' 
+#'
 #' @author Derek H. Ogle, \email{derek@@derekogle.com}
-#' 
+#'
 #' @seealso See \code{\link{abline}}, \code{\link[car]{regLine}} in \pkg{car}, \code{\link[psych]{error.bars}} in \pkg{psych}, \code{interaction.plot}, and \code{\link[sciplot]{lineplot.CI}} in \pkg{sciplot} for similar functionality.
-#' 
+#'
 #' @keywords hplot models
-#' 
+#'
 #' @examples
+#' data(Mirex)
 #' # create year as a factor variable
 #' Mirex$fyear <- factor(Mirex$year)
 #' # reduce number of years for visual simplicity for iVRs
 #' Mirex2 <- droplevels(subset(Mirex,fyear %in% c(1977,1992)))
-#' 
+#'
 #' ## One-way ANOVA
 #' aov1 <- lm(mirex~fyear,data=Mirex)
 #' fitPlot(aov1)
@@ -89,7 +90,7 @@
 #' fitPlot(ivr1,legend="topleft")
 #' fitPlot(ivr1,legend="topleft",interval="confidence")
 #' fitPlot(ivr1,legend="topleft",interval="confidence",col="Dark 2")
-#' 
+#'
 #' ## Indicator variable regression with one factor (assuming parallel lines)
 #' ivr2 <- lm(mirex~weight+species,data=Mirex2)
 #' fitPlot(ivr2,legend="topleft")
@@ -98,7 +99,7 @@
 #' ivr3 <- lm(mirex~weight*fyear*species,data=Mirex2)
 #' fitPlot(ivr3,ylim=c(0,0.8),legend="topleft")
 #' fitPlot(ivr3,ylim=c(0,0.8),legend="topleft",col="Spectral")
-#' 
+#'
 #' ## Polynomial regression
 #' poly1 <- lm(mirex~weight+I(weight^2),data=Mirex)
 #' fitPlot(poly1,interval="both")
@@ -122,18 +123,17 @@
 #' @export
 fitPlot <- function (object, ...) {
   if ("lm" %in% class(object)) ## This is a hack so no double deprecation warning
-    .Deprecated(msg="'fitPlot' is deprecated and will soon be removed from 'FSA'; see fishR post from 25-May-2021 for alternative methods.")
-  UseMethod("fitPlot") 
+  UseMethod("fitPlot")
 }
 
 #' @rdname fitPlot
 #' @export
 fitPlot.lm <- function(object, ...) {
-  object <- iTypeoflm(object)
+  object <- FSA:::iTypeoflm(object)
   if (object$Rnum>1)
-    STOP("'fitPlot()' does not work with more than 1 LHS variable.")
+    FSA:::STOP("'fitPlot()' does not work with more than 1 LHS variable.")
   if (object$type=="MLR")
-    STOP("Multiple linear regression objects are not supported by fitPlot.")
+    FSA:::STOP("Multiple linear regression objects are not supported by fitPlot.")
   fitPlot(object,...)
 }
 
@@ -146,17 +146,17 @@ fitPlot.SLR <- function(object,plot.pts=TRUE,pch=16,col.pt="black",
                         xlab=object$Enames[1],ylab=object$Rname,main="",
                         ylim=NULL,...) {
   ## Some tests
-  
+
   ## Check on conf.level
-  iCheckConfLevel(conf.level) 
-  
+  FSA:::iCheckConfLevel(conf.level)
+
   interval <- match.arg(interval)
   if (length(col.pt)>1) {
-    WARN("Only first color used for points in this SLR.")
+    FSA:::WARN("Only first color used for points in this SLR.")
     col.pt <- col.pt[1]
   }
   if (length(col.mdl)>1) {
-    WARN("Only first color used for the model in this SLR.")
+    FSA:::WARN("Only first color used for the model in this SLR.")
     col.mdl <- col.mdl[1]
   }
   ## Get data ready
@@ -201,9 +201,9 @@ fitPlot.SLR <- function(object,plot.pts=TRUE,pch=16,col.pt="black",
 fitPlot.IVR <- function(object,...) {
   ## Do some checks
   if (object$ENumNum>1)
-    STOP("'fitPlot()' cannot handle >1 covariate in an IVR.")
+    FSA:::STOP("'fitPlot()' cannot handle >1 covariate in an IVR.")
   if (object$EFactNum>2)
-    STOP("'fitPlot()' cannot handle >2 factors in an IVR.")
+    FSA:::STOP("'fitPlot()' cannot handle >2 factors in an IVR.")
   ## Decide if a one-way or two-way IVR
   if (object$EFactNum==1) iFitPlotIVR1(object,...)
   else iFitPlotIVR2(object,...)
@@ -217,10 +217,10 @@ iFitPlotIVR1 <- function(object,plot.pts=TRUE,pch=c(16,21,15,22,17,24,c(3:14)),
                          ylab=object$Rname,main="",
                          legend="topright",cex.leg=1,box.lty.leg=0,...) {
   ## Some checks
-  
+
   ## Check on conf.level
-  iCheckConfLevel(conf.level) 
-  
+  FSA:::iCheckConfLevel(conf.level)
+
   interval <- match.arg(interval)
   # extract y and x quantitative variables
   y <- object$mf[,object$Rname]
@@ -239,7 +239,7 @@ iFitPlotIVR1 <- function(object,plot.pts=TRUE,pch=c(16,21,15,22,17,24,c(3:14)),
   if (sum(c(length(unique(pch))==1,
             length(unique(lty))==1,
             length(unique(col))==1))>1)
-    WARN("Your choices for 'col', 'pch', and 'lty' will make it difficult to see groups.")
+    FSA:::WARN("Your choices for 'col', 'pch', and 'lty' will make it difficult to see groups.")
   ### Plot the points
   # Creates plot schematic -- no points or lines                   # nocov start
   graphics::plot(y~x,col="white",xlab=xlab,ylab=ylab,main=main,...)
@@ -252,7 +252,7 @@ iFitPlotIVR1 <- function(object,plot.pts=TRUE,pch=c(16,21,15,22,17,24,c(3:14)),
   for (i in 1:num.f1) {
     # Make the predictions at a bunch of values of x
     x.obs <- x[f1==levs.f1[i]]
-    y.obs <- y[f1==levs.f1[i]] 
+    y.obs <- y[f1==levs.f1[i]]
     xvals <- seq(min(x.obs),max(x.obs),length.out=200)
     newdf <- data.frame(xvals,as.factor(rep(levs.f1[i],length(xvals))))
     names(newdf) <- names(object$mf)[c(object$ENumPos,object$EFactPos)]
@@ -262,17 +262,17 @@ iFitPlotIVR1 <- function(object,plot.pts=TRUE,pch=c(16,21,15,22,17,24,c(3:14)),
     # add CI if asked for
     if (interval %in% c("confidence","both")) {
       graphics::lines(xvals,predC[,"upr"],col=col[i],lwd=1,lty=lty[i])
-      graphics::lines(xvals,predC[,"lwr"],col=col[i],lwd=1,lty=lty[i])     
+      graphics::lines(xvals,predC[,"lwr"],col=col[i],lwd=1,lty=lty[i])
     }
     # add PI if asked for
     if (interval %in% c("prediction","both")) {
       predP <- stats::predict(object$mdl,newdf,interval="prediction")
       graphics::lines(xvals,predP[,"upr"],col=col[i],lwd=1,lty=lty[i])
       graphics::lines(xvals,predP[,"lwr"],col=col[i],lwd=1,lty=lty[i])
-    }        
+    }
   } # end for i
   # Prepare list of col,pch,lty for legend
-  leg <- iLegendHelp(legend)
+  leg <- FSA:::iLegendHelp(legend)
   if (leg$do.legend) {
     if (plot.pts) graphics::legend(x=leg$x,y=leg$y,legend=levs.f1,col=col,
                                    pch=pch,lty=lty,cex=cex.leg,box.lty=box.lty.leg)
@@ -289,10 +289,10 @@ iFitPlotIVR2 <- function(object,plot.pts=TRUE,pch=c(16,21,15,22,17,24,c(3:14)),
                          xlab=names(object$mf[object$ENumPos]),
                          ylab=object$Rname,main="",
                          legend="topright",cex.leg=1,box.lty.leg=0,...) {
-  
+
   ## Check on conf.level
-  iCheckConfLevel(conf.level) 
-  
+  FSA:::iCheckConfLevel(conf.level)
+
   interval <- match.arg(interval)
   # extract y and x quantitative variables
   y <- object$mf[,object$Rname]
@@ -319,7 +319,7 @@ iFitPlotIVR2 <- function(object,plot.pts=TRUE,pch=c(16,21,15,22,17,24,c(3:14)),
       for (j in 1:num.f2) {
         # Plots points w/ different colors & points
         x.obs <- x[f1==levs.f1[i] & f2==levs.f2[j]]
-        y.obs <- y[f1==levs.f1[i] & f2==levs.f2[j]] 
+        y.obs <- y[f1==levs.f1[i] & f2==levs.f2[j]]
         graphics::points(x.obs,y.obs,col=col[i],pch=pch[j])
       }
     }
@@ -328,7 +328,7 @@ iFitPlotIVR2 <- function(object,plot.pts=TRUE,pch=c(16,21,15,22,17,24,c(3:14)),
     for (j in 1:num.f2) {
       # Plots points w/ different colors & points
       x.obs <- x[f1==levs.f1[i] & f2==levs.f2[j]]
-      y.obs <- y[f1==levs.f1[i] & f2==levs.f2[j]] 
+      y.obs <- y[f1==levs.f1[i] & f2==levs.f2[j]]
       # Make the predictions at a bunch of values of x
       xvals <- seq(min(x.obs),max(x.obs),length.out=200)
       newdf <- data.frame(xvals,
@@ -341,18 +341,18 @@ iFitPlotIVR2 <- function(object,plot.pts=TRUE,pch=c(16,21,15,22,17,24,c(3:14)),
       # add CI if asked for
       if (interval %in% c("confidence","both")) {
         graphics::lines(xvals,pred[,"upr"],col=col[i],lwd=1,lty=lty[j])
-        graphics::lines(xvals,pred[,"lwr"],col=col[i],lwd=1,lty=lty[j])     
+        graphics::lines(xvals,pred[,"lwr"],col=col[i],lwd=1,lty=lty[j])
       }
       # add PI if asked for
       if (interval %in% c("prediction","both")) {
         pred <- stats::predict(object$mdl,newdf,interval="prediction")
         graphics::lines(xvals,pred[,"upr"],col=col[i],lwd=1,lty=lty[j])
         graphics::lines(xvals,pred[,"lwr"],col=col[i],lwd=1,lty=lty[j])
-      }        
+      }
     } # end for j
   } # end for i
   # Prepare list of col,pch,lty for legend
-  leg <- iLegendHelp(legend)
+  leg <- FSA:::iLegendHelp(legend)
   if (leg$do.legend) {
     lcol <- rep(col,each=num.f2)
     lpch <- rep(pch,times=num.f1)
@@ -384,16 +384,16 @@ fitPlot.ONEWAY <- function (object,
                             interval=TRUE,conf.level=0.95,ci.fun=iCIfp(conf.level),
                             col.ci=col,lty.ci=1,
                             ...) {
-  
+
   ## Check on conf.level
-  iCheckConfLevel(conf.level) 
-  
+  FSA:::iCheckConfLevel(conf.level)
+
   if (length(col)>1) {
-    WARN("Only first color used.")
+    FSA:::WARN("Only first color used.")
     col <- col[1]
   }
   if (length(col.ci)>1) {
-    WARN("Only first color used for the CIs.")
+    FSA:::WARN("Only first color used for the CIs.")
     col.ci <- col.ci[1]
   }
   # extract x and y variables
@@ -421,10 +421,10 @@ fitPlot.TWOWAY <- function(object,which,change.order=FALSE,
                            ci.fun=iCIfp(conf.level),lty.ci=1,
                            legend="topright",cex.leg=1,box.lty.leg=0,
                            ...) {
-  
+
   ## Check on conf.level
-  iCheckConfLevel(conf.level) 
-  
+  FSA:::iCheckConfLevel(conf.level)
+
   # extract y variables
   y <- object$mf[,object$Rname]
   # find the factor variables
@@ -455,9 +455,9 @@ fitPlot.TWOWAY <- function(object,which,change.order=FALSE,
   } else stats::interaction.plot(x.factor,group,y,
                                  main=main,xlab=xlab,ylab=ylab,type=type,
                                  pch=pch[1:ngrps],lty=lty[1:ngrps],
-                                 col=col[1:ngrps],legend=FALSE,...) 
+                                 col=col[1:ngrps],legend=FALSE,...)
   if(ngrps>1) {
-    leg <- iLegendHelp(legend)
+    leg <- FSA:::iLegendHelp(legend)
     graphics::legend(leg$x,leg$y,legend=levels(group),pch=pch[1:ngrps],
                      lty=1:ngrps,col=col,cex=cex.leg,box.lty=box.lty.leg)
   }
@@ -503,7 +503,7 @@ fitPlot.nls <- function(object,d,
   x <- mdl$model[[xpos]]
   # create a vector of x values for making predictions -- many to make smooth
   fitx <- data.frame(seq(min(x),max(x),length.out=max(100,length(x))))
-  
+
   if (numvars==2) {
     # change name of x to name of x in model so that predict will work
     names(fitx) <- names(mdl$model)[xpos]
@@ -512,7 +512,7 @@ fitPlot.nls <- function(object,d,
     names(fits) <- c("x","y")
     # find limit for y-axis
     if (is.null(ylim)) ylim <- range(c(y,fits$y))
-    if (jittered) x <- jitter(x)    
+    if (jittered) x <- jitter(x)
     if (plot.pts) graphics::plot(x,y,pch=pch[1],col=col.pt[1],ylim=ylim,
                                  xlab=xlab,ylab=ylab,main=main,...)
     else graphics::plot(x,y,type="n",ylim=ylim,xlab=xlab,ylab=ylab,main=main,...)
@@ -534,7 +534,7 @@ fitPlot.nls <- function(object,d,
     }
     graphics::lines(fitsg1$x,fitsg1$y,lwd=lwd[1],lty=lty[1],col=col.mdl[1])
     graphics::lines(fitsg2$x,fitsg2$y,lwd=lwd[2],lty=lty[2],col=col.mdl[2])
-    leg <- iLegendHelp(legend)
+    leg <- FSA:::iLegendHelp(legend)
     if (leg$do.legend) {
       if (plot.pts) graphics::legend(x=leg$x,y=leg$y,legend=legend.lbls,
                                      col=col.pt,pch=pch,lty=lty)
@@ -550,7 +550,7 @@ fitPlot.glm <- function(object, ...) {
   if (object$family$family=="binomial" & object$family$link=="logit")
     fitPlot.logreg(object,...)
   else
-    STOP("Currently only logistic regression GLM models are supported by fitPlot.")
+    FSA:::STOP("Currently only logistic regression GLM models are supported by fitPlot.")
 }
 
 #' @rdname fitPlot
@@ -598,7 +598,7 @@ iFitPlotClrs2 <- function(var,col,defpal) {
       col <- grDevices::hcl.colors(num.grps,palette=col)
     else col <- rep(col,num.grps)
   } else if (length(col)<num.grps) {
-    WARN("Fewer colors sent (",length(col),
+    FSA:::WARN("Fewer colors sent (",length(col),
          ") then levels (",num.grps,"; changed to default colors.")
     col <- grDevices::hcl.colors(num.grps,pal="Dark 2")
   } else col <- col[1:num.grps]
@@ -610,7 +610,7 @@ iFitPlotPchs2 <- function(var,pch) {
   if (length(pch)>1 & num.grps <= length(pch)) pch <- pch[1:num.grps]
   else if (length(pch)==1 & num.grps>1) pch <- rep(pch,num.grps)
   else if (length(pch)<num.grps) {
-    WARN("Fewer pchs sent then levels. Changed to default pchs.")
+    FSA:::WARN("Fewer pchs sent then levels. Changed to default pchs.")
     pch <- c(16,21,15,22,17,24,c(3:14))[1:num.grps]
   }
   pch
@@ -621,7 +621,7 @@ iFitPlotLtys2 <- function(var,lty) {
   if (length(lty)>1 & num.grps <= length(lty)) lty <- lty[1:num.grps]
   else if (length(lty)==1& num.grps>1) lty <- rep(lty,num.grps)
   else if (length(lty)<num.grps) {
-    WARN("Fewer ltys sent then levels. Changed to default ltys.")
+    FSA:::WARN("Fewer ltys sent then levels. Changed to default ltys.")
     lty <- c(1:6,1:6)[1:num.grps]
   }
   lty
@@ -655,8 +655,8 @@ iPlotBinResp <- function(x,y,
   if (plot.p) {
     if (is.null(breaks)) {
       # if no p intervals defined on call then find ps for each value of x
-      p.i <- tapply(yn,x,mean)  
-      xs <- as.numeric(names(p.i)) 
+      p.i <- tapply(yn,x,mean)
+      xs <- as.numeric(names(p.i))
     } else {
       if (length(breaks)==1) {
         # handle if just a number of breaks is given

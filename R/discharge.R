@@ -57,7 +57,7 @@ discharge <- function(distance,depth,velocity,type=c("Mean","Mid")) {
     q <- w*dbar*vbar                                                            # find rectangle discharge
     calc.df <- data.frame(vbar=vbar,w=w,dbar=dbar,q=q)
   }
-    
+
   discharge.mid.section <- function(raw.df) { # mid section method
     w <- diff(raw.df$b)                                                         # compute interval widths
     w.n1 <- w[-length(w)]
@@ -97,20 +97,20 @@ summary.discharge <- function(object,detail=TRUE,...) {
 #'@export
 plot.discharge <- function(x,pch=19,xlab="Distance (ft)",ylab="Depth (ft)",newwin=TRUE,...) {
   mean.section.rects <- function(x,numpts,yloclab) { # put on rectangles, velocities in rectangle, discharges on top for mean section method
-    vel.col <- color.scale(x$calc.df$vbar,0,c(1,0.5),c(1,0.5))
+    vel.col <- plotrix::color.scale(x$calc.df$vbar,0,c(1,0.5),c(1,0.5))
     for (i in 1:(numpts-1)) {
-      rect(x$raw.df$b[i],-x$calc.df$dbar[i],x$raw.df$b[i+1],0,col=vel.col[i])                                      # make rectangles
-      text(x$raw.df$b[i]+x$calc.df$w[i]/2,-x$calc.df$dbar[i]*0.6,formatC(x$calc.df$vbar[i],digits=2,format="f"))   # place velocities at 60% mark
-      text(x$raw.df$b[i]+x$calc.df$w[i]/2,yloclab,formatC(x$calc.df$q[i],digits=2,format="f"),xpd=TRUE)            # place discharges across the top
-    }    
+      graphics::rect(x$raw.df$b[i],-x$calc.df$dbar[i],x$raw.df$b[i+1],0,col=vel.col[i])                                      # make rectangles
+      graphics::text(x$raw.df$b[i]+x$calc.df$w[i]/2,-x$calc.df$dbar[i]*0.6,formatC(x$calc.df$vbar[i],digits=2,format="f"))   # place velocities at 60% mark
+      graphics::text(x$raw.df$b[i]+x$calc.df$w[i]/2,yloclab,formatC(x$calc.df$q[i],digits=2,format="f"),xpd=TRUE)            # place discharges across the top
+    }
   }
 
   mid.section.rects <- function(x,numpts,yloclab) { # put on rectangles, velocities in rectangle, discharges on top for mid section method
-    vel.col <- color.scale(x$raw.df$v,0,c(1,0.5),c(1,0.5))
+    vel.col <- plotrix::color.scale(x$raw.df$v,0,c(1,0.5),c(1,0.5))
     for (i in 1:(numpts-1)) {
-      rect(x$raw.df$b[i]-x$calc.df$wids[i]/2,-x$raw.df$d[i],x$raw.df$b[i]+x$calc.df$wids[i]/2,0,col=vel.col[i])    # make rectangles
-      if (i>1) text(x$raw.df$b[i],-x$raw.df$d[i]*0.6,formatC(x$raw.df$v[i],digits=2,format="f"))                   # place velocities at 60% mark
-      text(x$raw.df$b[i],yloclab,formatC(x$calc.df$q[i],digits=2,format="f"),xpd=TRUE)                             # place discharges across the top
+      graphics::rect(x$raw.df$b[i]-x$calc.df$wids[i]/2,-x$raw.df$d[i],x$raw.df$b[i]+x$calc.df$wids[i]/2,0,col=vel.col[i])    # make rectangles
+      if (i>1) graphics::text(x$raw.df$b[i],-x$raw.df$d[i]*0.6,formatC(x$raw.df$v[i],digits=2,format="f"))                   # place velocities at 60% mark
+      graphics::text(x$raw.df$b[i],yloclab,formatC(x$calc.df$q[i],digits=2,format="f"),xpd=TRUE)                             # place discharges across the top
     }
   }
 
@@ -119,20 +119,20 @@ plot.discharge <- function(x,pch=19,xlab="Distance (ft)",ylab="Depth (ft)",newwi
   ndepth <- -x$raw.df$d                                                               # needed so the depths increase as you move down the y-axis
   dstnc <- x$raw.df$b
   plot(ndepth~dstnc,type="n",xlab=xlab,ylab=ylab,yaxt="n",xaxt="n",bty="n",...)  # base plot
-  yaxs.vals <- axTicks(side=2)                                                        # label axes -- x will be labeled with interval distances
-  axis(2,at=yaxs.vals,labels=-yaxs.vals)
-  axis(1,at=dstnc,labels=dstnc)
+  yaxs.vals <- graphics::axTicks(side=2)                                                        # label axes -- x will be labeled with interval distances
+  graphics::axis(2,at=yaxs.vals,labels=-yaxs.vals)
+  graphics::axis(1,at=dstnc,labels=dstnc)
  # put on the ground
-  polygon(c(-5,dstnc,1.5*dstnc[numpts],1.5*dstnc[numpts],-5,-5),c(ndepth[1],ndepth,ndepth[numpts],2*min(yaxs.vals),2*min(yaxs.vals),ndepth[1]),col="wheat4") 
+  graphics::polygon(c(-5,dstnc,1.5*dstnc[numpts],1.5*dstnc[numpts],-5,-5),c(ndepth[1],ndepth,ndepth[numpts],2*min(yaxs.vals),2*min(yaxs.vals),ndepth[1]),col="wheat4")
  # find y location for labels
   yloclab <- 0.10*diff(range(yaxs.vals))
  # plot the rectangles
   if (x$type=="Mean") { mean.section.rects(x,numpts,yloclab) }
     else mid.section.rects(x,numpts,yloclab)
  # put on stream cross-section
-  abline(h=0,lwd=3)                                                              # stream water surface
-  lines(ndepth~x$raw.df$b,lwd=3)
-  points(ndepth~x$raw.df$b,pch=pch)
+  graphics::abline(h=0,lwd=3)                                                              # stream water surface
+  graphics::lines(ndepth~x$raw.df$b,lwd=3)
+  graphics::points(ndepth~x$raw.df$b,pch=pch)
  # put total dischage in title heading
-  text(x$raw.df$b[numpts]/2,2.5*yloclab,paste(x$type.lbl,"Total Discharge =",formatC(x$discharge,digits=2,format="f")),xpd=TRUE,cex=1.25)  
+  graphics::text(x$raw.df$b[numpts]/2,2.5*yloclab,paste(x$type.lbl,"Total Discharge =",formatC(x$discharge,digits=2,format="f")),xpd=TRUE,cex=1.25)
 }

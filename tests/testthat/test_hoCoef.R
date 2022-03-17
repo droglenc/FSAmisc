@@ -1,5 +1,5 @@
 test_that("hoCoef() messages",{
-  Mirex <- data("Mirex",package="FSA")
+  data(Mirex)
   ## fit some linear regression results
   lm1 <- lm(mirex~weight,data=Mirex)
   lm2 <- lm(mirex~weight+year,data=Mirex)

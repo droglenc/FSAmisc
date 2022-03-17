@@ -55,9 +55,9 @@ diags <- function(x,which=0,incl.labels=c("none","row","column"),
                   val.name="value",label.name="label") {
   ## check if matrix
   if (!is.matrix(x))
-    STOP("'diags' only works with matrices.")
+    FSA:::STOP("'diags' only works with matrices.")
   if (nrow(x)==1 | ncol(x)==1)
-    STOP("'x' must have more than 1 row and more than 1 column.")
+    FSA:::STOP("'x' must have more than 1 row and more than 1 column.")
   ## find indices of diagonals for the matrix
   ## idea from https://stackoverflow.com/a/27935808/1123933/
   ind <- row(x)-col(x)
@@ -71,7 +71,7 @@ diags <- function(x,which=0,incl.labels=c("none","row","column"),
   } else {
     ## extract diagonal from x according to which
     if (which>max(ind) | which<min(ind))
-      STOP("The 'which' diagonal does not exist in 'x'.")
+      FSA:::STOP("The 'which' diagonal does not exist in 'x'.")
     res <- x[ind==which]
     ## handle adding names
     incl.labels <- match.arg(incl.labels)

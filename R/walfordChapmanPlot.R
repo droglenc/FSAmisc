@@ -64,17 +64,17 @@ walfordPlot <- function(formula,data=NULL,
   meanL <- tapply(len,age,mean,na.rm=TRUE)
   Lt1 <- meanL[-1]
   Lt <- meanL[-length(meanL)]
-  lm1 <- lm(Lt1~Lt)
-  a <- coef(lm1)[1]
-  b <- coef(lm1)[2]
+  lm1 <- stats::lm(Lt1~Lt)
+  a <- stats::coef(lm1)[1]
+  b <- stats::coef(lm1)[2]
   K <- -log(b)
   Linf <- a/(1-b)
   plot(Lt1~Lt,xlim=c(min(Lt),max(c(Lt,Linf))),ylim=c(min(Lt1),max(c(Lt1,Linf))),xlab=xlab,ylab=ylab,pch=pch)
-  abline(coef=c(0,1),lwd=lwdRL,lty=ltyRL,col=colRL)
-  abline(coef=coef(lm1),lwd=lwdLS,lty=ltyLS,col=colLS)
-  if (showLS) legend("bottomright",legend=c(paste("slope =",formatC(b,digits=3,format="f")),paste("intercept =",formatC(a,digits=1,format="f"))),bty="n")
-  if (showVB) legend("topleft",legend=c(paste("Linf =",formatC(Linf,digits=1,format="f")),paste("K =",formatC(K,digits=3,format="f"))),bty="n")
-  points(Linf,Linf,pch=pchLinf,cex=cexLinf,col=colLinf)
+  graphics::abline(coef=c(0,1),lwd=lwdRL,lty=ltyRL,col=colRL)
+  graphics::abline(coef=stats::coef(lm1),lwd=lwdLS,lty=ltyLS,col=colLS)
+  if (showLS) graphics::legend("bottomright",legend=c(paste("slope =",formatC(b,digits=3,format="f")),paste("intercept =",formatC(a,digits=1,format="f"))),bty="n")
+  if (showVB) graphics::legend("topleft",legend=c(paste("Linf =",formatC(Linf,digits=1,format="f")),paste("K =",formatC(K,digits=3,format="f"))),bty="n")
+  graphics::points(Linf,Linf,pch=pchLinf,cex=cexLinf,col=colLinf)
 }
 
 #' @rdname walfordChapmanPlot
@@ -97,15 +97,15 @@ chapmanPlot <- function(formula,data=NULL,
   meanL <- tapply(len,age,mean,na.rm=TRUE)
   dLt <- diff(meanL)
   Lt <- meanL[-length(meanL)]
-  lm1 <- lm(dLt~Lt)
-  a <- coef(lm1)[1]
-  b <- coef(lm1)[2]
+  lm1 <- stats::lm(dLt~Lt)
+  a <- stats::coef(lm1)[1]
+  b <- stats::coef(lm1)[2]
   K <- -log(1+b)
   Linf <- -a/b
   plot(dLt~Lt,xlim=c(min(Lt),max(c(Lt,Linf))),ylim=c(0,max(dLt)),xlab=xlab,ylab=ylab,pch=pch)
-  abline(coef=coef(lm1),lwd=lwdLS,lty=ltyLS,col=colLS)
-  abline(h=0)
-  if (showLS) legend("bottomleft",legend=c(paste("slope =",formatC(b,digits=3,format="f")),paste("intercept =",formatC(a,digits=1,format="f"))),bty="n")
-  if (showVB) legend("topright",legend=c(paste("Linf =",formatC(Linf,digits=1,format="f")),paste("K =",formatC(K,digits=3,format="f"))),bty="n")
-  points(Linf,0,pch=pchLinf,cex=cexLinf,col=colLinf)
+  graphics::abline(coef=stats::coef(lm1),lwd=lwdLS,lty=ltyLS,col=colLS)
+  graphics::abline(h=0)
+  if (showLS) graphics::legend("bottomleft",legend=c(paste("slope =",formatC(b,digits=3,format="f")),paste("intercept =",formatC(a,digits=1,format="f"))),bty="n")
+  if (showVB) graphics::legend("topright",legend=c(paste("Linf =",formatC(Linf,digits=1,format="f")),paste("K =",formatC(K,digits=3,format="f"))),bty="n")
+  graphics::points(Linf,0,pch=pchLinf,cex=cexLinf,col=colLinf)
 }

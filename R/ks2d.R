@@ -7,7 +7,7 @@
 #' @note This function is experimental at best at this point.
 #'
 #' @aliases ks2d1 print.ks2d1 plot.ks2d1
-#' 
+#'
 #' @param x1 Vector of X values.
 #' @param y1 Vector of Y values.
 #' @param justD Logical that indicates whether just the D test statistic (\code{=TRUE}) or more information should be returned (default; see value section below).
@@ -20,7 +20,7 @@
 #' @param xlim A vector of length two that indicates the limits over which to plot the x-axis.
 #' @param ylim A vector of length two that indicates the limits over which to plot the y-axis.
 #' @param \dots Additional arguments sent to the plot function.
-#' 
+#'
 #' @return The main function returns a single numeric of the D test statistic if \code{justD=TRUE} or a list with the following items if \code{justD=FALSE}:
 #'  \itemize{
 #'    \item D The D test statistic.  See details.
@@ -41,10 +41,10 @@
 #' @references
 #' Garvey, J.E., E.A. Marschall, and R.A. Wright.  1998.  \href{http://opensiuc.lib.siu.edu/fiaq_pubs/17/}{From star charts to stoneflies: detecting relationships in continuous bivariate data.} Ecology 79:442 447.
 #'
-#' Press, W.H., S.A. Teukolsky, W.T. Vetterling, B.P. Flannery.  2007.  \href{http://www.nr.com/}{Numerical Recipes: The Art of Scientific Computing, 3rd Edition.}  Cambridge University Press.  1286 pages. 
-#' 
+#' Press, W.H., S.A. Teukolsky, W.T. Vetterling, B.P. Flannery.  2007.  \href{http://www.nr.com/}{Numerical Recipes: The Art of Scientific Computing, 3rd Edition.}  Cambridge University Press.  1286 pages.
+#'
 #' @seealso \code{\link{ks2d1p}}
-#' 
+#'
 #' @keywords htest
 #'
 #' @examples
@@ -65,7 +65,7 @@
 #' data(Garvey1)
 #' ( res4 <- with(Garvey1,ks2d1(Ameletus,Leuctra)) )
 #' plot(res4,xlab="Ameletus Numbers",ylab="Leuctra Numbers",col=rgb(0,0,0,0.1))
-#' 
+#'
 #' @rdname ks2d1
 #' @export ks2d1
 ks2d1 <- function(x1,y1,justD=FALSE,KSp=FALSE,divbylen=TRUE) {
@@ -75,13 +75,13 @@ ks2d1 <- function(x1,y1,justD=FALSE,KSp=FALSE,divbylen=TRUE) {
     # observed proportions in each quadrant
     obs <- iquad_dens(d,x,y,divbylen)
     # expected proportions in each quadrant ... e.g., the expected proportion
-    #   that are less than x0, y0 is the proportion less than x0 times the 
+    #   that are less than x0, y0 is the proportion less than x0 times the
     #   the proportion less than y0.
     exp <- matrix(rowSums(obs),nrow=2) %*% matrix(colSums(obs),ncol=2)
     # find and return the maximum absolute difference
     max(abs(obs-exp))
   }  ## end internal dffrnc
-  
+
   # find maximum observed difference among obs and exp within quadrants around each point
   diff <- apply(cbind(x1,y1),1,dffrnc,x1,y1,divbylen)
   # find the maximum difference ... this is the D test statistic
@@ -89,7 +89,7 @@ ks2d1 <- function(x1,y1,justD=FALSE,KSp=FALSE,divbylen=TRUE) {
   # if only D is desired then return it, otherwise compute some more
   if (justD) D
   else {
-    # find where maximum first occurred  
+    # find where maximum first occurred
     where1 <- unique(which(round(diff,6)==round(D,6),arr.ind=TRUE))
     # get sample size
     n1 <- length(x1)
@@ -112,7 +112,7 @@ print.ks2d1 <- function(x,...) {
   tmp <- unlist(x[vars])
   tmp <- matrix(c(x$x1[x$where1],tmp,ifelse(x[["KSp"]],x[["pval"]],NA)),nrow=1)
   colnames(tmp) <- c("max1",vars,"pvalue")
-  printCoefmat(tmp,cs.ind=1,tst.ind=2,has.Pvalue=x[["KSp"]],...)
+  stats::printCoefmat(tmp,cs.ind=1,tst.ind=2,has.Pvalue=x[["KSp"]],...)
 }
 
 #' @rdname ks2d1
@@ -121,8 +121,8 @@ plot.ks2d1 <- function(x,xlab=NULL,ylab=NULL,xlim=range(x$x1),ylim=range(x$y1),p
   if (is.null(xlab)) xlab <- deparse(substitute(x$x1))
   if (is.null(ylab)) ylab <- deparse(substitute(x$y1))
   plot(x$y1~x$x1,pch=pch,xlab=xlab,ylab=ylab,xlim=xlim,ylim=ylim,...)
-  abline(v=x$x1[x[["where1"]]],lty=3,col=rainbow(length(x[["where1"]])))
-  abline(h=x$y1[x[["where1"]]],lty=3,col=rainbow(length(x[["where1"]])))
+  graphics::abline(v=x$x1[x[["where1"]]],lty=3,col=grDevices::rainbow(length(x[["where1"]])))
+  graphics::abline(h=x$y1[x[["where1"]]],lty=3,col=grDevices::rainbow(length(x[["where1"]])))
 }
 
 
@@ -161,7 +161,7 @@ plot.ks2d1 <- function(x,xlab=NULL,ylab=NULL,xlim=range(x$x1),ylim=range(x$y1),p
 #' @references
 #' Garvey, J.E., E.A. Marschall, and R.A. Wright.  1998.  \href{http://opensiuc.lib.siu.edu/fiaq_pubs/17/}{From star charts to stoneflies: detecting relationships in continuous bivariate data.} Ecology 79:442 447.
 #'
-#' Press, W.H., S.A. Teukolsky, W.T. Vetterling, B.P. Flannery.  2007.  \href{http://www.nr.com/}{Numerical Recipes: The Art of Scientific Computing, 3rd Edition.}  Cambridge University Press.  1286 pages. 
+#' Press, W.H., S.A. Teukolsky, W.T. Vetterling, B.P. Flannery.  2007.  \href{http://www.nr.com/}{Numerical Recipes: The Art of Scientific Computing, 3rd Edition.}  Cambridge University Press.  1286 pages.
 #'
 #' @keywords htest
 #'
@@ -188,7 +188,7 @@ ks2d1p <- function(object,B=100) {
     # send selected points to ks2d1 to compute D
     ks2d1(x1,y1,justD=TRUE,divbylen=object[["divbylen"]])
   } # end internal resampD
-  
+
   # resample D B times
   Dstat <- replicate(B,resampD(object))
   # p-value is proportion of resamples with larger D
@@ -205,15 +205,15 @@ print.ks2d1p <- function(x,...) {
           "  Used 'resample' method B=",x[["B"]]," times.")
   tmp <- matrix(unlist(x[c("D","pval")]),nrow=1)
   colnames(tmp) <- c("D","pvalue")
-  printCoefmat(tmp,tst.ind=1,has.Pvalue=TRUE,...)
+  stats::printCoefmat(tmp,tst.ind=1,has.Pvalue=TRUE,...)
 }
 
 #' @rdname ks2d1p
 #' @export
 plot.ks2d1p <- function(x,xlab="D Test Statistic",main="",...) {
-  plot(density(x$Ds),xlab=xlab,main=main,xlim=range(c(x$D,x$Ds)))
-  abline(v=x$D,col="red",lty=3)
-  axis(3,at=x$D,labels="D",col="red")
+  plot(stats::density(x$Ds),xlab=xlab,main=main,xlim=range(c(x$D,x$Ds)))
+  graphics::abline(v=x$D,col="red",lty=3)
+  graphics::axis(3,at=x$D,labels="D",col="red")
 }
 
 
@@ -270,7 +270,7 @@ plot.ks2d1p <- function(x,xlab="D Test Statistic",main="",...) {
 #' @references
 #' Garvey, J.E., E.A. Marschall, and R.A. Wright.  1998.  \href{http://opensiuc.lib.siu.edu/fiaq_pubs/17/}{From star charts to stoneflies: detecting relationships in continuous bivariate data.} Ecology 79:442 447.
 #'
-#' Press, W.H., S.A. Teukolsky, W.T. Vetterling, B.P. Flannery.  2007.  \href{http://www.nr.com/}{Numerical Recipes: The Art of Scientific Computing, 3rd Edition.}  Cambridge University Press.  1286 pages. 
+#' Press, W.H., S.A. Teukolsky, W.T. Vetterling, B.P. Flannery.  2007.  \href{http://www.nr.com/}{Numerical Recipes: The Art of Scientific Computing, 3rd Edition.}  Cambridge University Press.  1286 pages.
 #'
 #' @seealso \code{\link{ks2d1}} and \code{\link{ks2d2p}}
 #'
@@ -288,7 +288,7 @@ plot.ks2d1p <- function(x,xlab="D Test Statistic",main="",...) {
 #' plot(res1,xlim=c(-3,3),ylim=c(-3,3))
 #' # same but with large sample p-values --  HIGHLY EXPERIMENTAL (NOT YET TESTED)
 #' ( res1 <- ks2d2(d1$x,d1$y,d2$x,d2$y,KSp=TRUE) )
-#' 
+#'
 #' # perform same analysis with modified computation of proportions
 #' ( res2 <- ks2d2(d1$x,d1$y,d2$x,d2$y,divbylen=FALSE) )
 #'
@@ -301,19 +301,19 @@ ks2d2 <- function(x1,y1,x2,y2,justD=FALSE,KSp=FALSE,divbylen=TRUE) {
     q2 <- iquad_dens(d,x2,y2,divbylen)
     max(abs(q1 - q2))
   }  ## end internal dffrnc
-  
+
   # find differences using points in first, then second sample, as origins
   diff1 <- apply(cbind(x1,y1),1,dffrnc,x1,y1,x2,y2,divbylen)
   diff2 <- apply(cbind(x2,y2),1,dffrnc,x1,y1,x2,y2,divbylen)
   # find the maximum absolute difference in each sample
   max1 <- max(diff1)
   max2 <- max(diff2)
-  # compute test statistic and p-value  
+  # compute test statistic and p-value
   D <- mean(c(max1,max2))
   # if only D is desired then return it, otherwise compute some more
-  if (justD) { D }    
+  if (justD) { D }
   else {
-    # find where maximums first occurred  
+    # find where maximums first occurred
     where1 <- unique(which(round(diff1,6)==round(max1,6),arr.ind=TRUE))
     where2 <- unique(which(round(diff2,6)==round(max2,6),arr.ind=TRUE))
     # get two sample sizes
@@ -338,7 +338,7 @@ print.ks2d2 <- function(x,...) {
   tmp <- unlist(x[vars])
   tmp <- matrix(c(tmp,ifelse(x[["KSp"]],x[["pval"]],NA)),nrow=1)
   colnames(tmp) <- c(vars,"pvalue")
-  printCoefmat(tmp,cs.ind=c(1,3),tst.ind=5,has.Pvalue=x[["KSp"]],...)
+  stats::printCoefmat(tmp,cs.ind=c(1,3),tst.ind=5,has.Pvalue=x[["KSp"]],...)
 }
 
 #' @rdname ks2d2
@@ -346,16 +346,16 @@ print.ks2d2 <- function(x,...) {
 plot.ks2d2 <- function(x,pchs=c(2,19),cexs=c(1.25,1),xlab=NULL,ylab=NULL,xlim=range(c(x$x1,x$x2)),ylim=range(c(x$y1,x$y2)),...) {
   if (is.null(xlab)) xlab <- deparse(substitute(x$x1))
   if (is.null(ylab)) ylab <- deparse(substitute(x$y1))
-  op <- par(mfrow=c(1,2))
+  op <- graphics::par(mfrow=c(1,2))
   plot(x$y1~x$x1,pch=pchs[1],cex=cexs[1],xlab=xlab,ylab=ylab,xlim=xlim,ylim=ylim,main="First Set as Origins",...)
-  points(x$y2~x$x2,pch=pchs[2],cex=cexs[2])
-  abline(v=x$x1[x[["where1"]]],lty=3,col=rainbow(length(x[["where1"]])))
-  abline(h=x$y1[x[["where1"]]],lty=3,col=rainbow(length(x[["where1"]])))
+  graphics::points(x$y2~x$x2,pch=pchs[2],cex=cexs[2])
+  graphics::abline(v=x$x1[x[["where1"]]],lty=3,col=grDevices::rainbow(length(x[["where1"]])))
+  graphics::abline(h=x$y1[x[["where1"]]],lty=3,col=grDevices::rainbow(length(x[["where1"]])))
   plot(x$y1~x$x1,pch=pchs[1],cex=cexs[1],xlab=xlab,ylab=ylab,xlim=xlim,ylim=ylim,main="Second Set as Origins",...)
-  points(x$y2~x$x2,pch=pchs[2],cex=cexs[2])
-  abline(v=x$x2[x[["where2"]]],lty=3,col=rainbow(length(x[["where2"]])))
-  abline(h=x$y2[x[["where2"]]],lty=3,col=rainbow(length(x[["where2"]])))  
-  par(op)
+  graphics::points(x$y2~x$x2,pch=pchs[2],cex=cexs[2])
+  graphics::abline(v=x$x2[x[["where2"]]],lty=3,col=grDevices::rainbow(length(x[["where2"]])))
+  graphics::abline(h=x$y2[x[["where2"]]],lty=3,col=grDevices::rainbow(length(x[["where2"]])))
+  graphics::par(op)
 }
 
 
@@ -400,7 +400,7 @@ plot.ks2d2 <- function(x,pchs=c(2,19),cexs=c(1.25,1),xlab=NULL,ylab=NULL,xlim=ra
 #' @references
 #' Garvey, J.E., E.A. Marschall, and R.A. Wright.  1998.  \href{http://opensiuc.lib.siu.edu/fiaq_pubs/17/}{From star charts to stoneflies: detecting relationships in continuous bivariate data.} Ecology 79:442 447.
 #'
-#' Press, W.H., S.A. Teukolsky, W.T. Vetterling, B.P. Flannery.  2007.  \href{http://www.nr.com/}{Numerical Recipes: The Art of Scientific Computing, 3rd Edition.}  Cambridge University Press.  1286 pages. 
+#' Press, W.H., S.A. Teukolsky, W.T. Vetterling, B.P. Flannery.  2007.  \href{http://www.nr.com/}{Numerical Recipes: The Art of Scientific Computing, 3rd Edition.}  Cambridge University Press.  1286 pages.
 #'
 #' @keywords htest
 #'
@@ -423,7 +423,7 @@ plot.ks2d2 <- function(x,pchs=c(2,19),cexs=c(1.25,1),xlab=NULL,ylab=NULL,xlim=ra
 ks2d2p <- function(object,B=100,type=c("resample","randomize"),randtype=c("discrete","continuous"),coordX=NULL,coordY=NULL) {
   resampD <- function(object) {
     # combine all x coords into one vector
-    xt <- c(object[["x1"]],object[["x2"]]) 
+    xt <- c(object[["x1"]],object[["x2"]])
     # combine all y coords into one vector
     yt <- c(object[["y1"]],object[["y2"]])
     # sample n1 positions in combined vectors
@@ -431,7 +431,7 @@ ks2d2p <- function(object,B=100,type=c("resample","randomize"),randtype=c("discr
     # send selected points to ks2d to compute D
     ks2d2(xt[svals],yt[svals],xt[-svals],yt[-svals],justD=TRUE,divbylen=object$divbylen)
   } # end internal resamp.D
-  
+
   DrandD <- function(object,coordX,coordY) {
     minx <- coordX[1]; maxx <- coordX[2]; rngx <- maxx-minx+1
     miny <- coordY[1]; maxy <- coordY[2]; rngy <- maxy-miny+1
@@ -452,17 +452,17 @@ ks2d2p <- function(object,B=100,type=c("resample","randomize"),randtype=c("discr
     # compute and store D statistic
     ks2d2(X1,Y1,X2,Y2,justD=TRUE,divbylen=object$divbylen)
   } # end internal DrandD
-  
+
   CrandD <- function(object,coordX,coordY) {
     minx <- coordX[1]; maxx <- coordX[2]
     miny <- coordY[1]; maxy <- coordY[2]
-    X1 <- runif(object[["n1"]],minx,maxx)
-    Y1 <- runif(object[["n1"]],miny,maxy)
-    X2 <- runif(object[["n2"]],minx,maxx)
-    Y2 <- runif(object[["n2"]],miny,maxy)
+    X1 <- stats::runif(object[["n1"]],minx,maxx)
+    Y1 <- stats::runif(object[["n1"]],miny,maxy)
+    X2 <- stats::runif(object[["n2"]],minx,maxx)
+    Y2 <- stats::runif(object[["n2"]],miny,maxy)
     ks2d2(X1,Y1,X2,Y2,justD=TRUE,divbylen=object$divbylen)    # compute and store D statistic
   } # end internal CrandD
-  
+
   type <- match.arg(type)
   if (type=="resample") {
     randtype <- NULL
@@ -487,15 +487,15 @@ print.ks2d2p <- function(x,...) {
     else message("  Used ",x[["randtype"]]," 'randomization' method")
   tmp <- matrix(unlist(x[c("D","pval")]),nrow=1)
   colnames(tmp) <- c("D","pvalue")
-  printCoefmat(tmp,tst.ind=1,has.Pvalue=TRUE,...)
+  stats::printCoefmat(tmp,tst.ind=1,has.Pvalue=TRUE,...)
 }
 
 #' @rdname ks2d2p
 #' @export
 plot.ks2d2p <- function(x,xlab="D Test Statistic",main="",...) {
-  plot(density(x$Ds),xlab=xlab,main=main,xlim=range(c(x$D,x$Ds)))
-  abline(v=x$D,col="red",lty=3)
-  axis(3,at=x$D,labels="D",col="red")
+  plot(stats::density(x$Ds),xlab=xlab,main=main,xlim=range(c(x$D,x$Ds)))
+  graphics::abline(v=x$D,col="red",lty=3)
+  graphics::axis(3,at=x$D,labels="D",col="red")
 }
 
 
@@ -523,6 +523,3 @@ iquad_dens <- function(d,x,y,divbylen) {
   if (divbylen) res/length(x)   # ... from entire data set
   else res/sum(res)             # ... adjusting for removal of density=0
 }  ## end internal iquad_dens
-
-
-

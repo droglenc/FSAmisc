@@ -63,23 +63,23 @@ plot.wetPerim <- function(x,pch=19,xlab="Distance (ft)",ylab="Depth (ft)",...) {
   ndepth <- -x$raw.df$d                                                          # needed so the depths increase as you move down the y-axis
   dstnc <- x$raw.df$b
   plot(ndepth~dstnc,type="n",xlab=xlab,ylab=ylab,yaxt="n",xaxt="n",bty="n",...)  # base plot
-  yaxs.vals <- axTicks(side=2)                                                   # label axes -- x will be labeled with interval distances
-  axis(2,at=yaxs.vals,labels=-yaxs.vals)
-  axis(1,at=dstnc,labels=dstnc)
+  yaxs.vals <- graphics::axTicks(side=2)                                                   # label axes -- x will be labeled with interval distances
+  graphics::axis(2,at=yaxs.vals,labels=-yaxs.vals)
+  graphics::axis(1,at=dstnc,labels=dstnc)
  # put on the ground
-  polygon(c(-5,dstnc,1.5*dstnc[numpts],1.5*dstnc[numpts],-5,-5),c(ndepth[1],ndepth,ndepth[numpts],2*min(yaxs.vals),2*min(yaxs.vals),ndepth[1]),col="wheat4") 
+  graphics::polygon(c(-5,dstnc,1.5*dstnc[numpts],1.5*dstnc[numpts],-5,-5),c(ndepth[1],ndepth,ndepth[numpts],2*min(yaxs.vals),2*min(yaxs.vals),ndepth[1]),col="wheat4")
  # find y location for labels
   yloclab <- 0.10*diff(range(yaxs.vals))
  # put on stream cross-section
-  abline(h=0,lwd=3)                                                              # stream water surface
-  lines(ndepth~x$raw.df$b,lwd=3)
-  points(ndepth~x$raw.df$b,pch=pch)
+  graphics::abline(h=0,lwd=3)                                                              # stream water surface
+  graphics::lines(ndepth~x$raw.df$b,lwd=3)
+  graphics::points(ndepth~x$raw.df$b,pch=pch)
  # place perimeter values across the top \
   w <- diff(x$raw.df$b)
   for (i in 1:(numpts-1)) {
-    text(x$raw.df$b[i]+w[i]/2,yloclab,formatC(x$perims[i],digits=2,format="f"),xpd=TRUE)            # place discharges across the top
-  }    
+    graphics::text(x$raw.df$b[i]+w[i]/2,yloclab,formatC(x$perims[i],digits=2,format="f"),xpd=TRUE)            # place discharges across the top
+  }
 
  # put total perimeter in title heading
-  text(x$raw.df$b[numpts]/2,2.5*yloclab,paste("Total Wetted Perimeter =",formatC(x$wetperim,digits=2,format="f")),xpd=TRUE,cex=1.25)  
+  graphics::text(x$raw.df$b[numpts]/2,2.5*yloclab,paste("Total Wetted Perimeter =",formatC(x$wetperim,digits=2,format="f")),xpd=TRUE,cex=1.25)
 }

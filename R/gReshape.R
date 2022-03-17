@@ -2,7 +2,7 @@
 #'
 #' @description Converts growth data from the one-fish-per-line format to the one-measurement-per-line format.  One-fish-per-line format is a common form for collecting or storing growth data.  One-measurement-per-line format is required for many statistical analyses.
 #'
-#' @details This function does NOT convert the data from radial to incremental or incremental to radial measurements (see \code{\link[FSA]{gConvert}}).
+#' @details This function does NOT convert the data from radial to incremental or incremental to radial measurements.
 #'
 #' The input data frame in \code{df} must have the following specific formats.  First, the measurements of annular increments or radii must be in one-fish-per-line format.  The measurements must be contained in columns that are named with a common prefix (e.g., \dQuote{anu}, \dQuote{inc}, or \dQuote{rad}) followed by a number that represents the age of the fish when that portion of the structure formed.  This prefix must be the same for all columns that contains measurements and \bold{must not be found in any other variable (as a prefix or not)}.  For example, the first annular measurement should be in a variable named \dQuote{anu1}, the second annular measurement in \dQuote{anu2}, and so on.  The name of the prefix should be included in the \code{in.pre=} argument.
 #'
@@ -27,7 +27,7 @@
 #'
 #' @author Derek H. Ogle, \email{dogle@@northland.edu}
 #'
-#' @seealso See \code{\link[FSA]{gConvert}} in \pkg{FSA} for related code.  See \code{\link[stats]{reshape}}, and \code{\link[tidyr]{gather}} in \pkg{tidyr} for similar but more general functionality.
+#' @seealso See \code{\link[stats]{reshape}}, and \code{\link[tidyr]{gather}} in \pkg{tidyr} for similar but more general functionality.
 #'
 #' @keywords manip
 #'

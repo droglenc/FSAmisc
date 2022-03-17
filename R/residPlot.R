@@ -3,13 +3,13 @@
 #' @description Constructs a residual plot for \code{lm} or \code{nls} objects. Different symbols for different groups can be added to the plot if an indicator variable regression is used.
 #'
 #' @details Three types of residuals are allowed for most model types. Raw residuals are simply the difference between the observed response variable and the predicted/fitted value. Standardized residuals are internally studentized residuals returned by \code{\link{rstandard}} for linear models and are the raw residual divided by the standard deviation of the residuals for nonlinear models (as is done by \code{\link[nlstools]{nlsResiduals}} from \pkg{nlstools}). Studentized residuals are the externally studentized residuals returned by \code{\link{rstudent}} for linear models and are not available for nonlinear models.
-#' 
+#'
 #' Externally Studentized residuals are not supported for \code{nls} or \code{nlme} objects.
-#' 
+#'
 #' If \code{outlier.test=TRUE} then significant outliers are detected with \code{\link[car]{outlierTest}} from the \pkg{car} package. See the help for this function for more details.
 #'
 #' The user can include the model call as a title to the residual plot by using \code{main="MODEL"}. This only works for models created with \code{lm()}.
-#' 
+#'
 #' If the user chooses to add a legend without identifying coordinates for the upper-left corner of the legend (i.e., \code{legend=TRUE}) then the R console is suspended until the user places the legend by clicking on the produced graphic at the point where the upper-left corner of the legend should appear. A legend will only be placed if the \code{mdl} is an indicator variable regression, even if \code{legend=TRUE}.
 #'
 #' @note This function is meant to allow newbie students the ability to easily construct residual plots for one-way ANOVA, two-way ANOVA, simple linear regression, and indicator variable regressions. The plots can be constructed by submitting a saved linear model to this function which allows students to interact with and visualize moderately complex linear models in a fairly easy and efficient manner.
@@ -49,11 +49,12 @@
 #' @keywords hplot models
 #'
 #' @examples
+#' data(Mirex)
 #' # create year factor variable
 #' Mirex$fyear <- factor(Mirex$year)
 #' Mirex$cyear <- as.character(Mirex$year)
 #' Mirex$cspecies <- as.character(Mirex$species)
-#' 
+#'
 #' ## One-way ANOVA
 #' aov1 <- lm(mirex~fyear,data=Mirex)
 #' residPlot(aov1)
@@ -61,12 +62,12 @@
 #' ## Two-Way ANOVA
 #' aov2 <- lm(mirex~species*fyear,data=Mirex)
 #' residPlot(aov2)
-#' 
+#'
 #' ## Simple linear regression
 #' slr1 <- lm(mirex~weight,data=Mirex)
 #' residPlot(slr1)
 #' residPlot(slr1,loess=TRUE,main="MODEL")
-#' 
+#'
 #' ## Indicator variable regression with only one factor
 #' ivr1 <- lm(mirex~weight*fyear,data=Mirex)
 #' residPlot(ivr1)
@@ -77,11 +78,11 @@
 #' ## Indicator variable regression (assuming same slope)
 #' ivr2 <- lm(mirex~weight+fyear,data=Mirex)
 #' residPlot(ivr2,legend=FALSE,loess=TRUE)
-#' 
+#'
 #' ## Indicator variable regression with two factors
 #' ##    Reduce number of years for visual simplicity
 #' Mirex2 <- droplevels(subset(Mirex,fyear %in% c(1977,1992)))
-#' 
+#'
 #' ivr3 <- lm(mirex~weight*fyear*species,data=Mirex2)
 #' residPlot(ivr3)
 #' residPlot(ivr3,loess=TRUE,legend=FALSE)
@@ -104,22 +105,22 @@
 #' lma <- lm(y~x)
 #' residPlot(lma)
 #' residPlot(lma,resid.type="studentized")
-#' 
+#'
 #' @rdname residPlot
 #' @export
 residPlot <- function (object,...) {
   if ("lm" %in% class(object)) ## This is a hack so no double deprecation warning
     .Deprecated(msg="'residPlot' is deprecated and will soon be removed from 'FSA'; see fishR post from 1-Jun-2021 for alternative methods.")
-  UseMethod("residPlot") 
+  UseMethod("residPlot")
 }
 
 #' @rdname residPlot
 #' @export
 residPlot.lm <- function(object,...) { # nocov start
-  object <- iTypeoflm(object)
+  object <- FSA:::iTypeoflm(object)
   if (object$type=="MLR")
-    STOP("Multiple linear regression objects are not supported by residPlot.")
-  residPlot(object,...)                          
+    FSA:::STOP("Multiple linear regression objects are not supported by residPlot.")
+  residPlot(object,...)
 }  # nocov end
 
 #' @rdname residPlot
@@ -139,7 +140,7 @@ residPlot.SLR <- function(object,xlab="Fitted Values",ylab="Residuals",main="",
   iMakeBaseResidPlot(r,fv,xlab,ylab,main,lty.ref,lwd.ref,col.ref,
                      loess,lty.loess,lwd.loess,col.loess,trans.loess,...)
   graphics::points(r~fv,pch=pch,col=col)
-  if (outlier.test) iAddOutlierTestResults(object,fv,r,alpha) 
+  if (outlier.test) iAddOutlierTestResults(object,fv,r,alpha)
   if (inclHist) iHistResids(r,ylab)
 } # nocov end
 
@@ -153,8 +154,8 @@ residPlot.POLY <- function(object,...) { # nocov start
 #' @export
 residPlot.IVR <- function(object,legend="topright",cex.leg=1,box.lty.leg=0,...) {
   ## Do some checks
-  if (object$ENumNum>1) STOP("'residPlot()' cannot handle >1 covariate in an IVR.")
-  if (object$EFactNum>2) STOP("'resodPlot()' cannot handle >2 factors in an IVR.")
+  if (object$ENumNum>1) FSA:::STOP("'residPlot()' cannot handle >1 covariate in an IVR.")
+  if (object$EFactNum>2) FSA:::STOP("'resodPlot()' cannot handle >2 factors in an IVR.")
   ## Decide if a one-way or two-way IVR
   if (object$EFactNum==1) iResidPlotIVR1(object,legend,cex.leg,box.lty.leg,...)
   else iResidPlotIVR2(object,legend,cex.leg,box.lty.leg,...)
@@ -175,13 +176,13 @@ iResidPlotIVR1 <- function(object,legend,cex.leg,box.lty.leg,
   r <- tmp$r
   ylab <- tmp$ylab
   if (inclHist) withr::local_par(list(mfrow=c(1,2)))
-  leg <- iLegendHelp(legend)   # will there be a legend
+  leg <- FSA:::iLegendHelp(legend)   # will there be a legend
   if (!leg$do.legend) {
     iMakeBaseResidPlot(r,fv,xlab,ylab,main,lty.ref,lwd.ref,col.ref,
                        loess,lty.loess,lwd.loess,col.loess,trans.loess,...)
     graphics::points(r~fv,pch=pch[1],col=ifelse(col=="Dark 2","black",col))
     if (outlier.test) iAddOutlierTestResults(object,fv,r,alpha)
-  } else {      
+  } else {
     # extract the factor variable from the 2nd position
     f1 <- object$mf[,object$EFactPos[1]]
     # Handle colors, pchs, ltys -- one for each level of f1 factor unless only
@@ -191,7 +192,7 @@ iResidPlotIVR1 <- function(object,legend,cex.leg,box.lty.leg,
     ### Plot the points
     # Makes room for legend
     ifelse(leg$do.legend,xlim <- c(min(fv),max(fv)+0.3*(max(fv)-min(fv))),
-                         xlim <- range(fv)) 
+                         xlim <- range(fv))
     # Creates plot schematic -- no points or lines
     iMakeBaseResidPlot(r,fv,xlab,ylab,main,lty.ref,lwd.ref,col.ref,
                        loess,lty.loess,lwd.loess,col.loess,trans.loess,...)
@@ -229,7 +230,7 @@ iResidPlotIVR2 <- function(object,legend,cex.leg,box.lty.leg,
   r <- tmp$r
   ylab <- tmp$ylab
   if (inclHist) withr::local_par(list(mfrow=c(1,2)))
-  leg <- iLegendHelp(legend)   # will there be a legend
+  leg <- FSA:::iLegendHelp(legend)   # will there be a legend
   if (!leg$do.legend) {
     iMakeBaseResidPlot(r,fv,xlab,ylab,main,lty.ref,lwd.ref,col.ref,
                        loess,lty.loess,lwd.loess,col.loess,trans.loess,...)
@@ -251,7 +252,7 @@ iResidPlotIVR2 <- function(object,legend,cex.leg,box.lty.leg,
     # Makes room for legend
     ifelse(leg$do.legend,
            xlim <- c(min(fv),max(fv)+0.3*(max(fv)-min(fv))),
-           xlim <- range(fv)) 
+           xlim <- range(fv))
     # Creates plot schematic -- no points or lines
     iMakeBaseResidPlot(r,fv,xlab,ylab,main,lty.ref,lwd.ref,col.ref,
                        loess,lty.loess,lwd.loess,col.loess,trans.loess,...)
@@ -304,7 +305,7 @@ residPlot.ONEWAY <- function(object,xlab="Fitted Values",ylab="Residuals",main="
                          loess,lty.loess,lwd.loess,col.loess,trans.loess,...)
     graphics::points(r~fv,pch=pch,col=col)
       if (outlier.test) iAddOutlierTestResults(object,fv,r,alpha)
-  } 
+  }
   if (inclHist) iHistResids(r,ylab)
 } # nocov end
 
@@ -328,14 +329,14 @@ residPlot.TWOWAY <- function(object,xlab="Fitted Values",ylab="Residuals",main="
   if (inclHist) withr::local_par(list(mfrow=c(1,2)))
   if (bp) {
     graphics::boxplot(r~gf,xlab=xlab,ylab=ylab,main=main)
-    graphics::abline(h=0,lty=lty.ref,lwd=lwd.ref,col=col.ref) 
+    graphics::abline(h=0,lty=lty.ref,lwd=lwd.ref,col=col.ref)
   } else {
       iMakeBaseResidPlot(r,fv,xlab,ylab,main,lty.ref,lwd.ref,col.ref,
                          loess,lty.loess,lwd.loess,col.loess,trans.loess,...)
     graphics::points(r~fv,pch=pch,col=col)
       if (outlier.test) iAddOutlierTestResults(object,fv,r,alpha)
-  } 
-  if (inclHist) iHistResids(r,ylab) 
+  }
+  if (inclHist) iHistResids(r,ylab)
 } # nocov end
 
 #' @rdname residPlot
@@ -352,7 +353,7 @@ residPlot.nls<-function(object,xlab="Fitted Values",ylab="Residuals",main="",
   if (inclHist) withr::local_par(list(mfrow=c(1,2)))
   iMakeBaseResidPlot(r,fv,xlab,ylab,main,lty.ref,lwd.ref,col.ref,
                      loess,lty.loess,lwd.loess,col.loess,trans.loess,...)
-  graphics::points(r~fv,pch=pch,col=col) 
+  graphics::points(r~fv,pch=pch,col=col)
   if (inclHist) iHistResids(r,ylab)
 } # nocov end
 
@@ -372,7 +373,7 @@ residPlot.nlme<-function(object,xlab="Fitted Values",ylab="Residuals",main="",
   if (inclHist) withr::local_par(list(mfrow=c(1,2)))
   iMakeBaseResidPlot(r,fv,xlab,ylab,main,lty.ref,lwd.ref,col.ref,
                      loess,lty.loess,lwd.loess,col.loess,trans.loess,...)
-  graphics::points(r~fv,pch=pch,col=col) 
+  graphics::points(r~fv,pch=pch,col=col)
   if (inclHist) iHistResids(r,ylab)
 } # nocov end
 
@@ -392,7 +393,7 @@ iMakeBaseResidPlot <- function(r,fv,xlab,ylab,main,
   xrng <- range(fv)
   yrng <- range(r)
   graphics::plot(r~fv,col="white",xlab=xlab,ylab=ylab,main=main,...)
-  if (loess) iAddLoessLine(r,fv,lty.loess,lwd.loess,col.loess,trans.loess)
+  if (loess) FSA:::iAddLoessLine(r,fv,lty.loess,lwd.loess,col.loess,trans.loess)
   graphics::abline(h=0,lty=lty.ref,lwd=lwd.ref,col=col.ref)
 }
 
@@ -433,7 +434,7 @@ iGetMainTitle <- function(object,main) {
 }  # end iGetMainTitle internal function
 
 iHistResids <- function(r,xlab) {
-  hist.formula(~r,xlab=xlab)
+  FSA:::hist.formula(~r,xlab=xlab)
 }
 
 iHndlResidType <- function(object,resid.type,ylab) {
@@ -445,14 +446,14 @@ iHndlResidType <- function(object,resid.type,ylab) {
            )
   } else if (inherits(object,"nls")) {
     r <- stats::residuals(object)
-    if (resid.type=="studentized") STOP("resid.type= cannot be 'studentized' for NLS objects. Try resid.type='standardized'.")
+    if (resid.type=="studentized") FSA:::STOP("resid.type= cannot be 'studentized' for NLS objects. Try resid.type='standardized'.")
     else if (resid.type=="standardized") {
       # this follows nlsResiduals() from nlstools
       r <- (r-mean(r))/summary(object)$sigma
     }
   } else {
-    if (resid.type=="studentized") STOP("resid.type= cannot be 'studentized' for NLME objects. Try resid.type='standardized'.")
-    else if (resid.type=="standardized") { 
+    if (resid.type=="studentized") FSA:::STOP("resid.type= cannot be 'studentized' for NLME objects. Try resid.type='standardized'.")
+    else if (resid.type=="standardized") {
       r <- stats::residuals(object,type="pearson")
     } else {
       r <- stats::residuals(object,type="response")

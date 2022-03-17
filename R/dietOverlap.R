@@ -98,7 +98,7 @@
 #' TroutDietSL$LCat <- FSA::lencat(TroutDietSL$tl,breaks=c(0,350,500,650,950),right=TRUE)
 #'
 #' # isolate the non-empty fish (as the authors did)
-#' TroutDietSL1 <- FSA::Subset(TroutDietSL,empty=="NO")
+#' TroutDietSL1 <- subset(TroutDietSL,empty=="NO")
 #' with(TroutDietSL1,table(species,LCat))
 #'
 #' # summarize by computing the mean percent of the three diet items

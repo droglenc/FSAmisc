@@ -20,6 +20,7 @@
 #' @keywords htest
 #'
 #' @examples
+#' data(Mirex)
 #' # Simple linear regression test HA:slope!=0.1
 #' lm1 <- lm(mirex~weight, data=Mirex)
 #' hoCoef(lm1,2,0.1)
@@ -28,12 +29,12 @@
 hoCoef <- function(object,term=2,bo=0,alt=c("two.sided","less","greater")) {
   alt <- match.arg(alt)
   if (!"lm" %in% class(object))
-    STOP("'object' must be from 'lm'.")
+    FSA:::STOP("'object' must be from 'lm'.")
   if (!term>0)
-    STOP("'term' must be a positive number.")
+    FSA:::STOP("'term' must be a positive number.")
   tmp <- summary(object)$coefficients
   if (term>length(rownames(tmp)))
-    STOP("'term' is greater than number of terms in the model.")
+    FSA:::STOP("'term' is greater than number of terms in the model.")
   est <- tmp[term,"Estimate"]
   se <- tmp[term,"Std. Error"]
   t <- (est-bo)/se

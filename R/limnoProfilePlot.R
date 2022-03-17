@@ -35,6 +35,6 @@
 limnoProfilePlot <- function(depth,measure,type="b",...) {
   ndepth <- -depth
   plot(ndepth~measure,type=type,yaxt="n",...)
-  yaxs.vals <- axTicks(side=2)
-  axis(2,at=yaxs.vals,labels=-yaxs.vals)
+  yaxs.vals <- graphics::axTicks(side=2)
+  graphics::axis(2,at=yaxs.vals,labels=-yaxs.vals)
 }

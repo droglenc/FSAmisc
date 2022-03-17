@@ -43,6 +43,6 @@ filterD <- function(x,...,except=NULL) {
   res <- dplyr::filter(x,...)
   res <- droplevels(res,except)
   if (nrow(res)==0)
-    WARN("The resultant data.frame has 0 rows. Try str() on the result.\n")
+    FSA:::WARN("The resultant data.frame has 0 rows. Try str() on the result.\n")
   res
 }
