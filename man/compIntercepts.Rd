@@ -55,7 +55,7 @@ This function provides a statistical comparison of all pairs of intercepts by fi
 The default is to compute the adjusted values at the mean value of the covariate (i.e., \code{common.cov=mean(x)}. However, if interest is in the intercepts (i.e., at X=0) then \code{common.cov=0} should be used instead.
 }
 \examples{
-data(Mirex)
+data(Mirex,package="FSA")
 ## Reduce Mirex data to years where slopes don't differ to illustrate this
 ##   function ... see compSlopes() for analysis of full data set.
 Mirex <- Mirex[Mirex$year!="1996" & Mirex$year!="1999",]

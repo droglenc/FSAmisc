@@ -1,5 +1,5 @@
 ## Prepare data for testing
-data(Mirex)
+data(Mirex,package="FSA")
 Mirex$fyear <- factor(Mirex$year)
 
 

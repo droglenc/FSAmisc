@@ -8,25 +8,25 @@
 #'
 #' @aliases dietOverlap print.dietOverlap summary.dietOverlap
 #'
-#' @param diet1 A numerical vector of \sQuote{amount} (count or biomass) of prey items for the first predator.  Items should be in the same order as amounts in \code{diet2} and categories in \code{prey}.
-#' @param diet2 A numerical vector of \sQuote{amount} (count or biomass) of prey items for the second predator.  Items should be in the same order as amounts in \code{diet2} and categories in \code{prey}.
-#' @param type A single string that indicates the type of diet overlap index to compute.  See details.
-#' @param prey An optional string vector that contains the prey/diet category names.  If supplied the \code{prop} matrix in the returned list will use these prey categories as row names.  Items should be in the same order as items in \code{diet1} and \code{diet2}.
-#' @param num1 A numerical vector of the number of individuals of the first predator that consumed each prey item.  Items should be in same order as amounts in  \code{diet1} and categories in \code{prey}.
-#' @param num2 A numerical vector of the number of individuals of the second predator that consumed each prey item.  Items should be in same order as amounts in  \code{diet1} and categories in \code{prey}.
+#' @param diet1 A numerical vector of \sQuote{amount} (count or biomass) of prey items for the first predator. Items should be in the same order as amounts in \code{diet2} and categories in \code{prey}.
+#' @param diet2 A numerical vector of \sQuote{amount} (count or biomass) of prey items for the second predator. Items should be in the same order as amounts in \code{diet2} and categories in \code{prey}.
+#' @param type A single string that indicates the type of diet overlap index to compute. See details.
+#' @param prey An optional string vector that contains the prey/diet category names. If supplied the \code{prop} matrix in the returned list will use these prey categories as row names. Items should be in the same order as items in \code{diet1} and \code{diet2}.
+#' @param num1 A numerical vector of the number of individuals of the first predator that consumed each prey item. Items should be in same order as amounts in \code{diet1} and categories in \code{prey}.
+#' @param num2 A numerical vector of the number of individuals of the second predator that consumed each prey item. Items should be in same order as amounts in \code{diet1} and categories in \code{prey}.
 #' @param N1 A single numeric value that is the total number of the first predator sampled.
 #' @param N2 A single numeric value that is the total number of the second predator sampled.
 #' @param object A \code{dietOverlap} object.
 #' @param x A \code{dietOverlap} object.
 #' @param verbose A single logical that indicates whether more verbose summary information should be printed.
 #' @param digits A single numeric that indicates the number of digits to which the results should be printed.
-#' @param \dots Additional arguments for the S3 methods.  Not implemented for \code{summary}.
+#' @param \dots Additional arguments for the S3 methods. Not implemented for \code{summary}.
 #'
 #' @return The main function returns a list with the following three items:
 #'\itemize{
-#'\item type A single string that indicates the type of diet overlap indice used.
-#'\item doi A single numeric with the diet overlap index value is returned for all \code{type}s except for \sQuote{Levins} where a numeric vector of length two is returned with the overlap of the first predator on the second as the first value and the overlap of the second predator on the first as the second value.
-#'\item propdiet A matrix that contains the proportion of the total diet in each of the diet items for each predator.
+#'  \item type A single string that indicates the type of diet overlap indice used.
+#'  \item doi A single numeric with the diet overlap index value is returned for all \code{type}s except for \sQuote{Levins} where a numeric vector of length two is returned with the overlap of the first predator on the second as the first value and the overlap of the second predator on the first as the second value.
+#'  \item propdiet A matrix that contains the proportion of the total diet in each of the diet items for each predator.
 #'}
 #'
 #' @author Derek H. Ogle, \email{dogle@@northland.edu}
@@ -36,17 +36,17 @@
 #' @references
 #' Horn, H.S. 1966. Measurement of overlap in comparative ecological studies. American Naturalist 100:419-424.
 #'
-#' Krebs, C.J.  1989.  Ecological Methodology.  Harper Collins, New York.
+#' Krebs, C.J. 1989. Ecological Methodology. Harper Collins, New York.
 #'
-#' Levins, R. 1968. Evolution in changing environments: Some theoretical explorations.  Princeton University Press, Princeton.
+#' Levins, R. 1968. Evolution in changing environments: Some theoretical explorations. Princeton University Press, Princeton.
 #'
-#' Morisita, M. 1959. Measuring of interspecific association and similarity between communities.  Memoirs of the Faculty of Science of Kyusha University.  Series in Evolutionary Biology 3:65-80.
+#' Morisita, M. 1959. Measuring of interspecific association and similarity between communities. Memoirs of the Faculty of Science of Kyusha University. Series in Evolutionary Biology 3:65-80.
 #'
-#' Pianka R.D. 1973.  The structure of lizard communities. Annual Review of Ecology and Systematics 4:53-74.
+#' Pianka R.D. 1973. The structure of lizard communities. Annual Review of Ecology and Systematics 4:53-74.
 
-#' Schoener, T.W. 1970. Nonsynchronous spatial overlap of lizards in patchy habitats.  Ecology 51:408-418.
+#' Schoener, T.W. 1970. Nonsynchronous spatial overlap of lizards in patchy habitats. Ecology 51:408-418.
 #'
-#' Smith, E.P. and T.M. Zaret.  1982.  Bias in estimating niche overlap.  Ecology 63:1248-1253.
+#' Smith, E.P. and T.M. Zaret. 1982. Bias in estimating niche overlap. Ecology 63:1248-1253.
 #'
 #' @keywords manip
 #'
@@ -120,14 +120,18 @@
 #'
 #' @rdname dietOverlap
 #' @export dietOverlap
-dietOverlap <- function(diet1,diet2=NULL,type=c("Horn","Levins","Morisita","Pianka","Schoener"),prey=NULL,num1=NULL,num2=NULL,N1=NULL,N2=NULL) {
+dietOverlap <- function(diet1,diet2=NULL,
+                        type=c("Horn","Levins","Morisita","Pianka","Schoener"),
+                        prey=NULL,num1=NULL,num2=NULL,N1=NULL,N2=NULL) {
   ## Internal functions
     dietProp <- function(diet) { diet/sum(diet) }
 
     DOHorns <- function(diet1,diet2) {
       prop1 <- dietProp(diet1)                     # proportion of each prey in first diet
       prop2 <- dietProp(diet2)                     # proportion of each prey in second diet
-      if (any(c(prop1,prop2)==0)) stop("'Horn's' diet overlap index cannot be used when the proportion of any diet item is 0.",call.=FALSE)
+      if (any(c(prop1,prop2)==0))
+        stop("'Horn's' diet overlap index cannot be used when the proportion of any diet item is 0.",
+             call.=FALSE)
       doi <- (sum((prop1+prop2)*log(prop1+prop2))-sum(prop1*log(prop1))-sum(prop2*log(prop2)))/(2*log(2))
       list(type="Horns",doi=doi,propdiet=cbind(prop1,prop2))
     } # end DOHorns internal function
@@ -141,13 +145,17 @@ dietOverlap <- function(diet1,diet2=NULL,type=c("Horn","Levins","Morisita","Pian
     } # end DOLevins internal function
 
     DOMorisita <- function(diet1,diet2,num1,num2,N1,N2){
-      if (is.null(num1)|is.null(num2)) stop("'num1' and 'num2' must not be NULL if type='Morisita'.",call.=FALSE)
-      if (is.null(N1)|is.null(N2)) stop("'N1' and 'N2' must not be NULL if type='Morisita'.",call.=FALSE)
-      if (length(num1)!=length(num2)) stop("Lengths of 'num1' and 'num2' must be equal.",call.=FALSE)
-      if (length(num1)!=length(diet1)) stop("Lengths of 'diet1', 'diet2', 'num1', and 'num2' must be equal.",call.=FALSE)
+      if (is.null(num1)|is.null(num2))
+        stop("'num1' and 'num2' must not be NULL if type='Morisita'.",call.=FALSE)
+      if (is.null(N1)|is.null(N2))
+        stop("'N1' and 'N2' must not be NULL if type='Morisita'.",call.=FALSE)
+      if (length(num1)!=length(num2))
+        stop("Lengths of 'num1' and 'num2' must be equal.",call.=FALSE)
+      if (length(num1)!=length(diet1))
+        stop("Lengths of 'diet1', 'diet2', 'num1', and 'num2' must be equal.",call.=FALSE)
       prop1 <- dietProp(diet1)                     # proportion of each prey in first diet
       prop2 <- dietProp(diet2)                     # proportion of each prey in second diet
-      doi <- (2*sum(prop1*prop2))/(sum(prop1*((num1-1)*(N1-1)))+sum(prop2*((num2-1)*(N2-1))))
+      doi <- (2*sum(prop1*prop2))/(sum(prop1*((num1-1)/(N1-1)))+sum(prop2*((num2-1)/(N2-1))))
       list(type="Morisita",doi=doi,propdiet=cbind(prop1,prop2))
     } # end DOMorisita internal function
 
@@ -168,13 +176,17 @@ dietOverlap <- function(diet1,diet2=NULL,type=c("Horn","Levins","Morisita","Pian
   ## Start of main function
   type <- match.arg(type)
   if (!is.vector(diet1)) {
-    if (!(is.matrix(diet1) | is.data.frame(diet1))) stop("'diet1' must be either a vector, matrix, or data.frame.",call.=FALSE)
-    if (!is.null(diet2)) stop("'diet2' should be null if 'diet1' is a matrix or data.frame.",call.=FALSE)
-    if (ncol(diet1)>2) stop("'diet1' must contain only two columns (corresponding to two predators)",call.=FALSE)
+    if (!(is.matrix(diet1) | is.data.frame(diet1)))
+      stop("'diet1' must be either a vector, matrix, or data.frame.",call.=FALSE)
+    if (!is.null(diet2))
+      stop("'diet2' should be null if 'diet1' is a matrix or data.frame.",call.=FALSE)
+    if (ncol(diet1)>2)
+      stop("'diet1' must contain only two columns (corresponding to two predators)",call.=FALSE)
     diet2 <- as.vector(diet1[,2])
     diet1 <- as.vector(diet1[,1])
   }
-  if (length(diet1)!=length(diet2)) stop("Length (number of diet items) of 'diet1' and 'diet2' must be the same.",call.=FALSE)
+  if (length(diet1)!=length(diet2))
+    stop("Length (number of diet items) of 'diet1' and 'diet2' must be the same.",call.=FALSE)
   switch(type,
          Horn={res <- DOHorns(diet1,diet2)},
          Levins={res <- DOLevins(diet1,diet2)},
@@ -183,7 +195,9 @@ dietOverlap <- function(diet1,diet2=NULL,type=c("Horn","Levins","Morisita","Pian
          Schoener={res <- DOSchoener(diet1,diet2)}
          ) # end switch
   if (!is.null(prey)) {
-    if (length(diet1)!=length(prey)) stop("Number of prey categories in 'prey' must be same as number of items in 'diet1' and 'diet2'.",call.=FALSE)
+    if (length(diet1)!=length(prey))
+      stop("Number of prey categories in 'prey' must be same as number of items in 'diet1' and 'diet2'.",
+           call.=FALSE)
     rownames(res[["propdiet"]]) <- prey
   }
   class(res) <- "dietOverlap"

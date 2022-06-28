@@ -20,7 +20,7 @@
 #' @keywords htest
 #'
 #' @examples
-#' data(Mirex)
+#' data(Mirex,package="FSA")
 #' # Simple linear regression test HA:slope!=0.1
 #' lm1 <- lm(mirex~weight, data=Mirex)
 #' hoCoef(lm1,2,0.1)
@@ -49,4 +49,3 @@ hoCoef <- function(object,term=2,bo=0,alt=c("two.sided","less","greater")) {
   rownames(res) <- ""
   res
 }
-

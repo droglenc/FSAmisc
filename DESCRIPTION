@@ -18,7 +18,9 @@ Imports:
     sciplot,
     withr
 Suggests:
+    RFishBC,
     testthat,
     fishmethods,
     popbio
-RoxygenNote: 7.1.2
+Encoding: UTF-8
+RoxygenNote: 7.2.0

@@ -1,5 +1,5 @@
 test_that("hoCoef() messages",{
-  data(Mirex)
+  data(Mirex,package="FSA")
   ## fit some linear regression results
   lm1 <- lm(mirex~weight,data=Mirex)
   lm2 <- lm(mirex~weight+year,data=Mirex)
@@ -11,6 +11,7 @@ test_that("hoCoef() messages",{
   expect_error(hoCoef(lm2,term=5,bo=0.1),"greater")
 
   ## fit some non-linear regression results
+  data(Ecoli,package="FSA")
   fnx <- function(days,B1,B2,B3) {
     if (length(B1) > 1) {
       B2 <- B1[2]

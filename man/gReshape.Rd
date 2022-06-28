@@ -39,7 +39,7 @@ Returns a data frame in one-measurement-per-line format.  See details.
 Converts growth data from the one-fish-per-line format to the one-measurement-per-line format.  One-fish-per-line format is a common form for collecting or storing growth data.  One-measurement-per-line format is required for many statistical analyses.
 }
 \details{
-This function does NOT convert the data from radial to incremental or incremental to radial measurements.
+This function does NOT convert the data from radial to incremental or incremental to radial measurements (see \code{\link[RFishBC]{gConvert}}).
 
 The input data frame in \code{df} must have the following specific formats.  First, the measurements of annular increments or radii must be in one-fish-per-line format.  The measurements must be contained in columns that are named with a common prefix (e.g., \dQuote{anu}, \dQuote{inc}, or \dQuote{rad}) followed by a number that represents the age of the fish when that portion of the structure formed.  This prefix must be the same for all columns that contains measurements and \bold{must not be found in any other variable (as a prefix or not)}.  For example, the first annular measurement should be in a variable named \dQuote{anu1}, the second annular measurement in \dQuote{anu2}, and so on.  The name of the prefix should be included in the \code{in.pre=} argument.
 
@@ -53,29 +53,27 @@ The name of the variable in the reshaped output data frame that contains the mea
 This code was in \pkg{FSA} but it can largely be accomplished with \code{\link[tidyr]{gather}} from \pkg{tidyr} and \code{\link[stringr]{str_sub}} from \pkg{stringr}.
 }
 \examples{
-if (require(FSA)) {
-  data(SMBassWB)
-  head(SMBassWB)
+data(SMBassWB,package="FSA")
+head(SMBassWB)
 
-  # convert radial measurements to increments
-  SMBi1 <- gConvert(SMBassWB,in.pre="anu",type="inc")
-  head(SMBi1)
+# convert radial measurements to increments
+SMBi1 <- RFishBC::gConvert(SMBassWB,in.pre="anu",out.type="inc")
+head(SMBi1)
 
-  SMBi1a <- gReshape(SMBi1,in.pre="inc")
-  head(SMBi1a)
+SMBi1a <- gReshape(SMBi1,in.pre="inc")
+head(SMBi1a)
 
-  # same as above but assume that last increment (in agecap variable) is plus-growth
-  SMBi2a <- gReshape(SMBi1,in.pre="inc",last.plus="agecap")
-  head(SMBi2a)
+# same as above but assume that last increment (in agecap variable) is plus-growth
+SMBi2a <- gReshape(SMBi1,in.pre="inc",last.plus="agecap")
+head(SMBi2a)
 
-  # example of dropping some variables before reshaping
-  SMBi1b <- gReshape(SMBi1,in.pre="inc",drop=c("species","lake"))
-  head(SMBi1b)
-}
+# example of dropping some variables before reshaping
+SMBi1b <- gReshape(SMBi1,in.pre="inc",drop=c("species","lake"))
+head(SMBi1b)
 
 }
 \seealso{
-See \code{\link[stats]{reshape}}, and \code{\link[tidyr]{gather}} in \pkg{tidyr} for similar but more general functionality.
+See also \code{\link[RFishBC]{gConvert}} for related code, and \code{\link[stats]{reshape}}, and \code{\link[tidyr]{gather}} in \pkg{tidyr} for similar but more general functionality.
 }
 \author{
 Derek H. Ogle, \email{dogle@northland.edu}

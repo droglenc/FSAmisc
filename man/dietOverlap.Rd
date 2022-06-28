@@ -22,17 +22,17 @@ dietOverlap(
 \method{summary}{dietOverlap}(object, verbose = TRUE, digits = getOption("digits"), ...)
 }
 \arguments{
-\item{diet1}{A numerical vector of \sQuote{amount} (count or biomass) of prey items for the first predator.  Items should be in the same order as amounts in \code{diet2} and categories in \code{prey}.}
+\item{diet1}{A numerical vector of \sQuote{amount} (count or biomass) of prey items for the first predator. Items should be in the same order as amounts in \code{diet2} and categories in \code{prey}.}
 
-\item{diet2}{A numerical vector of \sQuote{amount} (count or biomass) of prey items for the second predator.  Items should be in the same order as amounts in \code{diet2} and categories in \code{prey}.}
+\item{diet2}{A numerical vector of \sQuote{amount} (count or biomass) of prey items for the second predator. Items should be in the same order as amounts in \code{diet2} and categories in \code{prey}.}
 
-\item{type}{A single string that indicates the type of diet overlap index to compute.  See details.}
+\item{type}{A single string that indicates the type of diet overlap index to compute. See details.}
 
-\item{prey}{An optional string vector that contains the prey/diet category names.  If supplied the \code{prop} matrix in the returned list will use these prey categories as row names.  Items should be in the same order as items in \code{diet1} and \code{diet2}.}
+\item{prey}{An optional string vector that contains the prey/diet category names. If supplied the \code{prop} matrix in the returned list will use these prey categories as row names. Items should be in the same order as items in \code{diet1} and \code{diet2}.}
 
-\item{num1}{A numerical vector of the number of individuals of the first predator that consumed each prey item.  Items should be in same order as amounts in  \code{diet1} and categories in \code{prey}.}
+\item{num1}{A numerical vector of the number of individuals of the first predator that consumed each prey item. Items should be in same order as amounts in \code{diet1} and categories in \code{prey}.}
 
-\item{num2}{A numerical vector of the number of individuals of the second predator that consumed each prey item.  Items should be in same order as amounts in  \code{diet1} and categories in \code{prey}.}
+\item{num2}{A numerical vector of the number of individuals of the second predator that consumed each prey item. Items should be in same order as amounts in \code{diet1} and categories in \code{prey}.}
 
 \item{N1}{A single numeric value that is the total number of the first predator sampled.}
 
@@ -40,7 +40,7 @@ dietOverlap(
 
 \item{x}{A \code{dietOverlap} object.}
 
-\item{\dots}{Additional arguments for the S3 methods.  Not implemented for \code{summary}.}
+\item{\dots}{Additional arguments for the S3 methods. Not implemented for \code{summary}.}
 
 \item{object}{A \code{dietOverlap} object.}
 
@@ -51,9 +51,9 @@ dietOverlap(
 \value{
 The main function returns a list with the following three items:
 \itemize{
-\item type A single string that indicates the type of diet overlap indice used.
-\item doi A single numeric with the diet overlap index value is returned for all \code{type}s except for \sQuote{Levins} where a numeric vector of length two is returned with the overlap of the first predator on the second as the first value and the overlap of the second predator on the first as the second value.
-\item propdiet A matrix that contains the proportion of the total diet in each of the diet items for each predator.
+ \item type A single string that indicates the type of diet overlap indice used.
+ \item doi A single numeric with the diet overlap index value is returned for all \code{type}s except for \sQuote{Levins} where a numeric vector of length two is returned with the overlap of the first predator on the second as the first value and the overlap of the second predator on the first as the second value.
+ \item propdiet A matrix that contains the proportion of the total diet in each of the diet items for each predator.
 }
 }
 \description{
@@ -137,16 +137,16 @@ dietOverlap(mndiet[mndiet$LCat=="650",3:4],prey=levels(mndiet$item),type="Schoen
 \references{
 Horn, H.S. 1966. Measurement of overlap in comparative ecological studies. American Naturalist 100:419-424.
 
-Krebs, C.J.  1989.  Ecological Methodology.  Harper Collins, New York.
+Krebs, C.J. 1989. Ecological Methodology. Harper Collins, New York.
 
-Levins, R. 1968. Evolution in changing environments: Some theoretical explorations.  Princeton University Press, Princeton.
+Levins, R. 1968. Evolution in changing environments: Some theoretical explorations. Princeton University Press, Princeton.
 
-Morisita, M. 1959. Measuring of interspecific association and similarity between communities.  Memoirs of the Faculty of Science of Kyusha University.  Series in Evolutionary Biology 3:65-80.
+Morisita, M. 1959. Measuring of interspecific association and similarity between communities. Memoirs of the Faculty of Science of Kyusha University. Series in Evolutionary Biology 3:65-80.
 
-Pianka R.D. 1973.  The structure of lizard communities. Annual Review of Ecology and Systematics 4:53-74.
-Schoener, T.W. 1970. Nonsynchronous spatial overlap of lizards in patchy habitats.  Ecology 51:408-418.
+Pianka R.D. 1973. The structure of lizard communities. Annual Review of Ecology and Systematics 4:53-74.
+Schoener, T.W. 1970. Nonsynchronous spatial overlap of lizards in patchy habitats. Ecology 51:408-418.
 
-Smith, E.P. and T.M. Zaret.  1982.  Bias in estimating niche overlap.  Ecology 63:1248-1253.
+Smith, E.P. and T.M. Zaret. 1982. Bias in estimating niche overlap. Ecology 63:1248-1253.
 }
 \seealso{
 See \code{\link[pgirmess]{piankabio}} in \pkg{pgirmess} for similar functionality.

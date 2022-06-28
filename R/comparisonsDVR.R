@@ -45,7 +45,7 @@
 #' @keywords htest
 #'
 #' @examples
-#' data(Mirex)
+#' data(Mirex,package="FSA")
 #' Mirex$year <- factor(Mirex$year)
 #' # fit a dummy variable regression, see that slopes differ
 #' lm1 <- lm(mirex~weight*year,data=Mirex)
@@ -163,7 +163,7 @@ print.compSlopes <- function(x,...) { # nocov start
 #' @keywords htest
 #'
 #' @examples
-#' data(Mirex)
+#' data(Mirex,package="FSA")
 #' ## Reduce Mirex data to years where slopes don't differ to illustrate this
 #' ##   function ... see compSlopes() for analysis of full data set.
 #' Mirex <- Mirex[Mirex$year!="1996" & Mirex$year!="1999",]

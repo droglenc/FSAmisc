@@ -49,7 +49,7 @@
 #' @keywords hplot models
 #'
 #' @examples
-#' data(Mirex)
+#' data(Mirex,package="FSA")
 #' # create year factor variable
 #' Mirex$fyear <- factor(Mirex$year)
 #' Mirex$cyear <- as.character(Mirex$year)
@@ -192,7 +192,7 @@ iResidPlotIVR1 <- function(object,legend,cex.leg,box.lty.leg,
     ### Plot the points
     # Makes room for legend
     ifelse(leg$do.legend,xlim <- c(min(fv),max(fv)+0.3*(max(fv)-min(fv))),
-                         xlim <- range(fv))
+           xlim <- range(fv))
     # Creates plot schematic -- no points or lines
     iMakeBaseResidPlot(r,fv,xlab,ylab,main,lty.ref,lwd.ref,col.ref,
                        loess,lty.loess,lwd.loess,col.loess,trans.loess,...)
@@ -301,10 +301,10 @@ residPlot.ONEWAY <- function(object,xlab="Fitted Values",ylab="Residuals",main="
     graphics::boxplot(r~gf,xlab=xlab,ylab=ylab,main=main)
     graphics::abline(h=0,lty=lty.ref,lwd=lwd.ref,col=col.ref)
   } else {
-      iMakeBaseResidPlot(r,fv,xlab,ylab,main,lty.ref,lwd.ref,col.ref,
-                         loess,lty.loess,lwd.loess,col.loess,trans.loess,...)
+    iMakeBaseResidPlot(r,fv,xlab,ylab,main,lty.ref,lwd.ref,col.ref,
+                       loess,lty.loess,lwd.loess,col.loess,trans.loess,...)
     graphics::points(r~fv,pch=pch,col=col)
-      if (outlier.test) iAddOutlierTestResults(object,fv,r,alpha)
+    if (outlier.test) iAddOutlierTestResults(object,fv,r,alpha)
   }
   if (inclHist) iHistResids(r,ylab)
 } # nocov end
@@ -331,10 +331,10 @@ residPlot.TWOWAY <- function(object,xlab="Fitted Values",ylab="Residuals",main="
     graphics::boxplot(r~gf,xlab=xlab,ylab=ylab,main=main)
     graphics::abline(h=0,lty=lty.ref,lwd=lwd.ref,col=col.ref)
   } else {
-      iMakeBaseResidPlot(r,fv,xlab,ylab,main,lty.ref,lwd.ref,col.ref,
-                         loess,lty.loess,lwd.loess,col.loess,trans.loess,...)
+    iMakeBaseResidPlot(r,fv,xlab,ylab,main,lty.ref,lwd.ref,col.ref,
+                       loess,lty.loess,lwd.loess,col.loess,trans.loess,...)
     graphics::points(r~fv,pch=pch,col=col)
-      if (outlier.test) iAddOutlierTestResults(object,fv,r,alpha)
+    if (outlier.test) iAddOutlierTestResults(object,fv,r,alpha)
   }
   if (inclHist) iHistResids(r,ylab)
 } # nocov end
@@ -443,7 +443,7 @@ iHndlResidType <- function(object,resid.type,ylab) {
            raw= { r <- object$mdl$residuals },
            standardized= { r <- stats::rstandard(object$mdl) },
            studentized= { r <- stats::rstudent(object$mdl) }
-           )
+    )
   } else if (inherits(object,"nls")) {
     r <- stats::residuals(object)
     if (resid.type=="studentized") FSA:::STOP("resid.type= cannot be 'studentized' for NLS objects. Try resid.type='standardized'.")

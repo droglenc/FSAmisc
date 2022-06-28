@@ -61,7 +61,7 @@
 #' @keywords hplot models
 #'
 #' @examples
-#' data(Mirex)
+#' data(Mirex,package="FSA")
 #' # create year as a factor variable
 #' Mirex$fyear <- factor(Mirex$year)
 #' # reduce number of years for visual simplicity for iVRs
@@ -105,6 +105,7 @@
 #' fitPlot(poly1,interval="both")
 #'
 #' ## Non-linear model example
+#' data(Ecoli,package="FSA")
 #' lr.sv <- list(B1=6,B2=7.2,B3=-1.5)
 #' nl1 <- nls(cells~B1/(1+exp(B2+B3*days)),start=lr.sv,data=Ecoli)
 #' fitPlot(nl1,Ecoli,cex.main=0.7,lwd=2)
@@ -123,7 +124,7 @@
 #' @export
 fitPlot <- function (object, ...) {
   if ("lm" %in% class(object)) ## This is a hack so no double deprecation warning
-  UseMethod("fitPlot")
+    UseMethod("fitPlot")
 }
 
 #' @rdname fitPlot
@@ -599,7 +600,7 @@ iFitPlotClrs2 <- function(var,col,defpal) {
     else col <- rep(col,num.grps)
   } else if (length(col)<num.grps) {
     FSA:::WARN("Fewer colors sent (",length(col),
-         ") then levels (",num.grps,"; changed to default colors.")
+               ") then levels (",num.grps,"; changed to default colors.")
     col <- grDevices::hcl.colors(num.grps,pal="Dark 2")
   } else col <- col[1:num.grps]
   col
