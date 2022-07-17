@@ -4,7 +4,7 @@
 * `compIntercepts()`: Added. From `FSA`.
 * `compSlopes()`: Added. From `FSA`.
 * `diags()`: Added. From `FSA`.
-* `dietOverlap()`: Modified. Corrected formula in Morisita's index (thanks to Colt Holley). 
+* `dietOverlap()`: Modified. Corrected formula in Morisita's index and added hand-calculated test (thanks to Colt Holley) that addresses [#1](https://github.com/droglenc/FSAmisc/issues/1). 
 * `filterD()`: Added. From `FSA`.
 * `fitPlot()`: Added. From `FSA`.
 * `hoCoefs()`: Added. From `FSA`.
