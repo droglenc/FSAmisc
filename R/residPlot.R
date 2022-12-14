@@ -110,7 +110,7 @@
 #' @export
 residPlot <- function (object,...) {
   if ("lm" %in% class(object)) ## This is a hack so no double deprecation warning
-    .Deprecated(msg="'residPlot' is deprecated and will soon be removed from 'FSA'; see fishR post from 1-Jun-2021 for alternative methods.")
+    .Deprecated(msg="'residPlot' was removed from 'FSA'; see fishR post from 1-Jun-2021 for alternative methods.")
   UseMethod("residPlot")
 }
 

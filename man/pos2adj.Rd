@@ -5,8 +5,8 @@
 \title{Convert a "directional" position to "adj" values for labeling a point.}
 \usage{
 pos2adj(
-  pos = c("center", "S", "W", "N", "East", "SW", "NW", "NE", "SE", "s", "w", "n",
-    "east", "sw", "nw", "ne", "se"),
+  pos = c("center", "S", "W", "N", "East", "SW", "NW", "NE", "SE", "s", "w", "n", "east",
+    "sw", "nw", "ne", "se"),
   offset = 0.5
 )
 }

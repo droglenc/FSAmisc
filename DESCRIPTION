@@ -1,7 +1,7 @@
 Package: FSAmisc
 Title: Miscellaneous functions for simple fisheries stock assessment methods
 Version: 0.0.3
-Date: 2022-07-17
+Date: 2022-12-12
 Description: In progress or miscellaneous functions related to the FSA package.
 Authors@R: person("Derek","Ogle",email="dogle@northland.edu",role=c("aut","cre"))
 URL: https://github.com/droglenc/FSAmisc
@@ -23,4 +23,4 @@ Suggests:
     fishmethods,
     popbio
 Encoding: UTF-8
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.2

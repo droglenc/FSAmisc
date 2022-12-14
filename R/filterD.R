@@ -39,7 +39,7 @@
 #' @rdname filterD
 #' @export
 filterD <- function(x,...,except=NULL) {
-  .Deprecated(msg="'filter' is deprecated and will soon be removed from 'FSA'; please use 'droplevels' after 'subset' or 'dplyr::filter' for the same result (see fishR post from 26-May-2021).")
+  .Deprecated(msg="'filterD' was removed from 'FSA'; please use 'droplevels' after 'subset' or 'dplyr::filter' for the same result (see fishR post from 26-May-2021).")
   res <- dplyr::filter(x,...)
   res <- droplevels(res,except)
   if (nrow(res)==0)

@@ -130,12 +130,19 @@ fitPlot <- function (object, ...) {
 #' @rdname fitPlot
 #' @export
 fitPlot.lm <- function(object, ...) {
+  .Deprecated(msg="'fitPlot' was removed from 'FSA'; see fishR post from 25-May-2021 for alternative methods.")
   object <- FSA:::iTypeoflm(object)
   if (object$Rnum>1)
     FSA:::STOP("'fitPlot()' does not work with more than 1 LHS variable.")
   if (object$type=="MLR")
     FSA:::STOP("Multiple linear regression objects are not supported by fitPlot.")
-  fitPlot(object,...)
+  if ("ONEWAY" %in% class(object)) fitPlot.ONEWAY(object,...)
+  else if ("TWOWAY" %in% class(object)) fitPlot.TWOWAY(object,...)
+  else if ("SLR" %in% class(object)) fitPlot.SLR(object,...)
+  else if ("IVR" %in% class(object)) fitPlot.IVR(object,...)
+  else if ("nls" %in% class(object)) fitPlot.nls(object,...)
+  else if ("glm" %in% class(object)) fitPlot.glm(object,...)
+  else if ("POLY" %in% class(object)) fitPlot.POLY(object,...)
 }
 
 #' @rdname fitPlot
